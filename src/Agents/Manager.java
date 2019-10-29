@@ -1,9 +1,43 @@
 package Agents;
 
-public class Manager {
-    //vai comunicar com os jogadores para mudar as tácticas (e tipos de jogadores?) dependente do resultado
+import jade.core.Agent;
+import jade.core.behaviours.*;
+import Utils.Position;
+import Utils.Stats;
+import jade.core.AID;
 
-    public Manager() {
+import jade.domain.DFService;
+import jade.domain.FIPAAgentManagement.*;
+import jade.domain.FIPAException;
+
+public class Manager extends Agent {
+    
+	protected void setup()
+    {
+		
     }
 
+	/*************************************************************/
+	/*                     DF managing                           */
+	/*************************************************************/
+	void register( ServiceDescription sd)
+//  ---------------------------------
+    {
+        DFAgentDescription dfd = new DFAgentDescription();
+        dfd.setName(getAID());
+        dfd.addServices(sd);
+
+        try {  
+            DFService.register(this, dfd );  
+        }
+        catch (FIPAException fe) { fe.printStackTrace(); }
+    }
+	
+	protected void takeDown() 
+//  ---------------------------------
+    {
+       try { DFService.deregister(this); }
+       catch (Exception e) {}
+    }
+	
 }

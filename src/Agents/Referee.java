@@ -1,57 +1,41 @@
 package Agents;
 
 import jade.core.Agent;
-
 import jade.core.behaviours.*;
-import Agents.Game.gatherPlayers;
-import Utils.*;
+import Agents.Player.joiGame;
+import Utils.Position;
+import Utils.Stats;
 import jade.core.AID;
-
-import jade.lang.acl.ACLMessage;
-import jade.lang.acl.MessageTemplate;
 
 import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.*;
+import jade.lang.acl.ACLMessage;
 import jade.domain.FIPAException;
 
-public class Player extends Agent {
-    public final static String JOIN = "JOIN";
+public class Referee extends Agent {
+    public final static String JOINREF = "JOINREF";
     public final static String JOINNED = "JOINNED";
     public final static String FAILED = "FAILED";
 
-	private Position position= new Position(0,0);
-    private boolean hasBall=false;
-    private int team = 0;
-    private Stats stats = null;
-    
+	private int timer = 60*4;
+
+
 	protected void setup()
     {
-		
-		Object[] args = getArguments();
-		if (args != null && args.length == 1) {
-        	int stats = -1;
-            stats = (int) args[0];
-        	this.stats = new Stats(stats);  
-			
-		} else {
-        	System.out.println("Wrong arguments - will be a normal player (standard stats)");
-        }
-		
-        addBehaviour( new joiGame(this) );
-        
+		addBehaviour( new joiGame(this) );
     }
 
 	/*************************************************************/
 	/*                  Simple Behaviours                        */
 	/*************************************************************/
 	class joiGame extends SimpleBehaviour {
-		private Player father;
+		private Referee father;
 		private AID agentGame = null;
 		private boolean joinned = false;
 	    
 	    public joiGame( Agent a ) {
 	    	super(a);
-	    	this.father = (Player) a;
+	    	this.father = (Referee) a;
 	    }
 	    
 		public void action() 
@@ -65,7 +49,7 @@ public class Player extends Agent {
 	        	this.agentGame = getService("game");
 				
 				ACLMessage m = new ACLMessage( ACLMessage.INFORM );
-		        m.setContent( JOIN );
+		        m.setContent( JOINREF );
 		        m.addReceiver( this.agentGame );
 	
 		        send( m );
@@ -86,15 +70,15 @@ public class Player extends Agent {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-	        	System.out.println("running player");
+	        	System.out.println("running referee");
 	        	
 	        	ACLMessage msg = receive();
 
 	            if (msg != null) {
-	            	System.out.println("player caught msg!");
+	            	System.out.println("referee caught msg!");
 	            	AID sender = msg.getSender();
 	            	 if (JOINNED.equals( msg.getContent() )) {
-	         			System.out.println("Joined game!");  
+	         			System.out.println("Referee joined game!");  
 	         			this.joinned = true;
 	            	 } else if (FAILED.equals( msg.getContent() )) {
 	         			System.out.println("Error couldn't join a game!");
@@ -150,17 +134,3 @@ public class Player extends Agent {
       	return null;
 	}
 }
-//Get stats has args
-		/*
-		Object[] args = getArguments();
-		if (args != null && args.length == 5) {
-     	int[] stats = {0, 0, 0, 0, 0};
-     	for (int i = 0; i<args.length; i++) {
-             stats[i] = (int) args[i];
-         }
-     	this.stats = new Stats(stats[0], stats[1], stats[2], stats[3], stats[4]);        
-     } else {
-     	System.out.println("Wrong arguments");
-     	return;
-     }
-     */
