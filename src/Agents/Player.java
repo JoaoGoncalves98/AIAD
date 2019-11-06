@@ -23,7 +23,7 @@ public class Player extends Agent {
     private boolean hasBall=false;
     private int team = 0;
     private Stats stats = null;
-    
+
 	protected void setup()
     {
 		
@@ -149,6 +149,53 @@ public class Player extends Agent {
         catch (FIPAException fe) { fe.printStackTrace(); }
       	return null;
 	}
+
+	/************************************************************/
+	/*                     Gets and Sets                         */
+	/*************************************************************/
+	public Stats getStats() {
+		return stats;
+	}
+
+	public Position getPosition() {
+		return position;
+	}
+
+	public void setPosition(Position position) {
+		this.position = position;
+	}
+
+	public boolean hasBall() {
+		return hasBall;
+	}
+
+	public void setHasBall(boolean hasBall) {
+		this.hasBall = hasBall;
+	}
+
+	public int basketRange(){
+		double getNetDist;
+		if(team==1) //Aqui o cesto vai tar na posição x=15, y=5
+			getNetDist = Math.sqrt(Math.pow(Math.abs(15-position.getX()),2) + Math.pow(Math.abs(5-position.getY()),2));
+		else //Aqui o cesto vai tar na posição x=0, y=5
+			getNetDist = Math.sqrt(Math.pow(Math.abs(0-position.getX()),2) + Math.pow(Math.abs(5-position.getY()),2));
+		if (getNetDist<4) // close range
+			return 0;
+		if (getNetDist <6) // short 3-pointer
+			return 1;
+		else // long shot
+			return 2;
+	}
+
+	public boolean isMidRange(){
+		double getNetDist;
+		if(team==1) //Aqui o cesto vai tar na posição x=15, y=5
+			getNetDist = Math.sqrt(Math.pow(Math.abs(15-position.getX()),2) + Math.pow(Math.abs(5-position.getY()),2));
+		else //Aqui o cesto vai tar na posição x=0, y=5
+			getNetDist = Math.sqrt(Math.pow(Math.abs(0-position.getX()),2) + Math.pow(Math.abs(5-position.getY()),2));
+		return (getNetDist<4);
+	}
+
 }
 //Get stats has args
 		/*
