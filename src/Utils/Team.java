@@ -18,7 +18,7 @@ public class Team {
 	private int difScore = 0;
 	private String tactics = "";
 
-	private Manager manager = new Manager();
+	private AID manager = null;
 	
 	public Team(int nPlayers, String name) {
 		this.nPlayers = nPlayers;
@@ -34,10 +34,22 @@ public class Team {
 		return false;
 	}
 
+	public void setManager ( AID man ) {
+		this.manager = man;
+	}
+	public AID getManager () {
+		return this.manager;
+	}
+	public boolean hasManager () {
+		if(this.manager != null)
+			return true;
+		return false;
+	}
 
 	public ArrayList<AID> getPlayers() {
 		return players;
 	}
+
 	public boolean hasPosession() {
 		return hasPosession;
 	}

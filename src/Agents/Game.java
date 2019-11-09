@@ -24,7 +24,7 @@ public class Game extends Agent {
         this.utils.register( sd );
 
         /* Does first behaviour */
-		addBehaviour( new gatherPlayers(this, this.nPlayers) );
+		addBehaviour( new gatherGameMembers(this, this.nPlayers) );
 
 		/* Does second behaviour */
 		addBehaviour( new warnReferee(this) );
@@ -40,15 +40,16 @@ public class Game extends Agent {
 
 	/*************************************************************/
 	/*                  Simple Behaviours                        */
-	/*					 Gather Players							 */
+	/*				   Gather Game Members						 */
 	/*************************************************************/
-	class gatherPlayers extends SimpleBehaviour {
+	class gatherGameMembers extends SimpleBehaviour {
 		private int incPlayers = 0;
 		private int incReferee = 0;
+		private int incManagers = 0;
 		private int nPlayers = 0;
 		private Game father;
 	    
-	    public gatherPlayers( Agent a, int limit) {
+	    public gatherGameMembers( Agent a, int limit) {
 	    	super(a);
 	    	this.father = (Game) a;
 	    	this.nPlayers = limit;
@@ -56,7 +57,7 @@ public class Game extends Agent {
 	    
 		public void action() 
         {
-			while(this.incPlayers != this.nPlayers || this.incReferee != 1) {
+			while(this.incPlayers != this.nPlayers || this.incReferee != 1 || this.incManagers != 2 ) {
 	            ACLMessage msg = receive();
 
 	            try {
@@ -70,10 +71,10 @@ public class Game extends Agent {
 	            	System.out.println("game caught msg!");
 	            	AID sender = msg.getSender();
 	            	System.out.println(sender);
-	                if (this.father.utils.JOIN.equals( msg.getContent() )) {
+	                if (Utils.JOIN.equals( msg.getContent() )) {
 	                	if(this.father.getTeam1().addPlayer(sender)) {
 	                		ACLMessage m = new ACLMessage( ACLMessage.INFORM );
-	                        m.setContent( this.father.utils.JOINNED );
+	                        m.setContent(Utils.JOINNED);
 	                        m.addReceiver( sender );
 	
 	                        send( m );
@@ -82,25 +83,51 @@ public class Game extends Agent {
 	                	}
 	            		else if(this.father.getTeam2().addPlayer(sender)) {
 	                		ACLMessage m = new ACLMessage( ACLMessage.INFORM );
-	                        m.setContent( this.father.utils.FAILED );
+	                        m.setContent(Utils.FAILED);
 	                        m.addReceiver( sender );
 	
 	                        send( m );      
 	                        
 	                        this.incPlayers++;          			
 	            		}
-	                } else if (this.father.utils.JOINREF.equals( msg.getContent() )) {
-	                	this.father.setReferee(sender);
-	                	
-	                	ACLMessage m = new ACLMessage( ACLMessage.INFORM );
-                        m.setContent( this.father.utils.JOINNED );
-                        m.addReceiver( sender );
+	                } else if (Utils.JOINREF.equals( msg.getContent() )) {
+						this.father.setReferee(sender);
 
-                        send( m );
-                        
-	                	this.incReferee++;
-                        
-	                } else {
+						ACLMessage m = new ACLMessage( ACLMessage.INFORM );
+						m.setContent(Utils.JOINNED);
+						m.addReceiver( sender );
+
+						send( m );
+
+						this.incReferee++;
+
+					} else if (Utils.JOINMAN.equals( msg.getContent() )) {
+						if(this.father.team1.hasManager()) {
+							ACLMessage m = new ACLMessage( ACLMessage.INFORM );
+							m.setContent(Utils.JOINNED);
+							m.addReceiver( sender );
+
+							send( m );
+
+							this.incManagers++;
+							this.father.team1.setManager( sender );
+						} else if(this.father.team2.hasManager()) {
+							ACLMessage m = new ACLMessage( ACLMessage.INFORM );
+							m.setContent(Utils.JOINNED);
+							m.addReceiver( sender );
+
+							send( m );
+
+							this.incManagers++;
+							this.father.team2.setManager( sender );
+						} else {
+							ACLMessage m = new ACLMessage( ACLMessage.INFORM );
+							m.setContent(Utils.FAILED);
+							m.addReceiver( sender );
+
+							send( m );
+						}
+					} else {
             			System.out.println("This message wasn't suposed to come here xd");
             		}
 	            } else {
@@ -135,7 +162,7 @@ public class Game extends Agent {
 
 		public void action() {
 			ACLMessage m = new ACLMessage( ACLMessage.INFORM );
-			m.setContent( this.father.utils.STARTGAME );
+			m.setContent(Utils.STARTGAME);
 			m.addReceiver( this.father.referee );
 
 			send( m );
@@ -155,7 +182,7 @@ public class Game extends Agent {
 					System.out.println("game caught msg!");
 					AID sender = msg.getSender();
 					System.out.println(sender);
-					if (this.father.utils.STARTEDGAME.equals( msg.getContent() )) {
+					if (Utils.STARTEDGAME.equals( msg.getContent() )) {
 						this.flag = !this.flag;
 					}
 				} else {

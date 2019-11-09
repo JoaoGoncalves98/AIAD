@@ -62,7 +62,7 @@ public class Player extends Agent {
 				this.agentGame = this.father.utils.getService("game");
 
 				ACLMessage m = new ACLMessage( ACLMessage.INFORM );
-				m.setContent( this.father.utils.JOIN );
+				m.setContent(Utils.JOIN);
 				m.addReceiver( this.agentGame );
 
 				send( m );
@@ -90,10 +90,10 @@ public class Player extends Agent {
 				if (msg != null) {
 					System.out.println("player caught msg!");
 					AID sender = msg.getSender();
-					if (this.father.utils.JOINNED.equals( msg.getContent() )) {
+					if (Utils.JOINNED.equals( msg.getContent() )) {
 						System.out.println("Joined game!");
 						this.joinned = true;
-					} else if (this.father.utils.FAILED.equals( msg.getContent() )) {
+					} else if (Utils.FAILED.equals( msg.getContent() )) {
 						System.out.println("Error couldn't join a game!");
 					} else {
 						System.out.println("Got the wrong message?!?");

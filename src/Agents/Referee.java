@@ -51,7 +51,7 @@ public class Referee extends Agent {
 				this.agentGame = this.father.utils.getService("game");
 
 				ACLMessage m = new ACLMessage( ACLMessage.INFORM );
-				m.setContent( this.father.utils.JOINREF );
+				m.setContent(Utils.JOINREF);
 				m.addReceiver( this.agentGame );
 				this.father.setGame( this.agentGame );
 
@@ -80,10 +80,10 @@ public class Referee extends Agent {
 				if (msg != null) {
 					System.out.println("referee caught msg!");
 					AID sender = msg.getSender();
-					if (this.father.utils.JOINNED.equals( msg.getContent() )) {
+					if (Utils.JOINNED.equals( msg.getContent() )) {
 						System.out.println("Referee joined game!");
 						this.joinned = true;
-					} else if (this.father.utils.FAILED.equals( msg.getContent() )) {
+					} else if (Utils.FAILED.equals( msg.getContent() )) {
 						System.out.println("Error couldn't join a game!");
 					} else {
 						System.out.println("Got the wrong message?!?");
@@ -127,12 +127,12 @@ public class Referee extends Agent {
 				if (msg != null) {
 					System.out.println("referee caught msg!");
 					AID sender = msg.getSender();
-					if (this.father.utils.STARTGAME.equals( msg.getContent() )) {
+					if (Utils.STARTGAME.equals( msg.getContent() )) {
 						System.out.println("Referee will start the clock!");
 						this.flag = !this.flag;
 
 						ACLMessage m = new ACLMessage( ACLMessage.INFORM );
-						m.setContent( this.father.utils.STARTEDGAME );
+						m.setContent(Utils.STARTEDGAME);
 						m.addReceiver( this.father.agentGame );
 
 						send( m );
@@ -172,7 +172,7 @@ public class Referee extends Agent {
 			System.out.println("Referee stopped the clock! Ending GAME!");
 
 			ACLMessage m = new ACLMessage( ACLMessage.INFORM );
-			m.setContent( this.father.utils.ENDEDGAME );
+			m.setContent(Utils.ENDEDGAME);
 			m.addReceiver( this.father.agentGame );
 
 			send( m );

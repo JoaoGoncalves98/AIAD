@@ -8,13 +8,14 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 
 public class Utils {
+    public final static String JOIN = "JOIN";
     public final static String JOINREF = "JOINREF";
-    public final static String JOINNED = "JOINNED";
+    public final static String JOINMAN = "JOINREF";
+    public final static String JOINNED = "JOINMAN";
     public final static String FAILED = "FAILED";
     public final static String STARTGAME = "STARTGAME";
     public final static String STARTEDGAME = "STARTEDGAME";
     public final static String ENDEDGAME = "ENDEDGAME";
-    public final static String JOIN = "JOIN";
 
     private Agent agent = null;
 
