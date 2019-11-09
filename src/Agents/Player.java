@@ -15,9 +15,8 @@ import jade.domain.FIPAAgentManagement.*;
 import jade.domain.FIPAException;
 
 public class Player extends Agent {
-    public final static String JOIN = "JOIN";
-    public final static String JOINNED = "JOINNED";
-    public final static String FAILED = "FAILED";
+
+	private Utils utils = new Utils( this );
 
 	private Position position= new Position(0,0);
     private boolean hasBall=false;
@@ -66,10 +65,10 @@ public class Player extends Agent {
 
 				System.out.println("searching game");
 
-				this.agentGame = getService("game");
+				this.agentGame = this.father.utils.getService("game");
 
 				ACLMessage m = new ACLMessage( ACLMessage.INFORM );
-				m.setContent( JOIN );
+				m.setContent( this.father.utils.JOIN );
 				m.addReceiver( this.agentGame );
 
 				send( m );
@@ -97,10 +96,10 @@ public class Player extends Agent {
 				if (msg != null) {
 					System.out.println("player caught msg!");
 					AID sender = msg.getSender();
-					if (JOINNED.equals( msg.getContent() )) {
+					if (this.father.utils.JOINNED.equals( msg.getContent() )) {
 						System.out.println("Joined game!");
 						this.joinned = true;
-					} else if (FAILED.equals( msg.getContent() )) {
+					} else if (this.father.utils.FAILED.equals( msg.getContent() )) {
 						System.out.println("Error couldn't join a game!");
 					} else {
 						System.out.println("Got the wrong message?!?");
@@ -134,7 +133,7 @@ public class Player extends Agent {
 
 				System.out.println("game started?");
 
-				this.agentGame = getService("gamestarted");
+				this.agentGame = this.father.utils.getService("gamestarted");
 
 				try {
 					Thread.sleep(1000);
@@ -160,46 +159,6 @@ public class Player extends Agent {
 
 		private boolean finished = false;
 		public  boolean done() {  return finished;  }
-	}
-	
-	/*************************************************************/
-	/*                     DF managing                           */
-	/*************************************************************/
-	void register( ServiceDescription sd)
-//  ---------------------------------
-    {
-        DFAgentDescription dfd = new DFAgentDescription();
-        dfd.setName(getAID());
-        dfd.addServices(sd);
-
-        try {  
-            DFService.register(this, dfd );  
-        }
-        catch (FIPAException fe) { fe.printStackTrace(); }
-    }
-	
-	protected void takeDown() 
-//  ---------------------------------
-    {
-       try { DFService.deregister(this); }
-       catch (Exception e) {}
-    }
-	
-	AID getService( String service )
-//  ---------------------------------
-	{
-		DFAgentDescription dfd = new DFAgentDescription();
-   		ServiceDescription sd = new ServiceDescription();
-   		sd.setType( service );
-		dfd.addServices(sd);
-		try
-		{
-			DFAgentDescription[] result = DFService.search(this, dfd);
-			if (result.length>0)
-				return result[0].getName() ;
-		}
-        catch (FIPAException fe) { fe.printStackTrace(); }
-      	return null;
 	}
 
 	/************************************************************/

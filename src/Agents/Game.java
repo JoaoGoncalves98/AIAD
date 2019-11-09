@@ -17,12 +17,8 @@ import jade.wrapper.ContainerController;
 import jade.wrapper.StaleProxyException;
 
 public class Game extends Agent {
-    public final static String JOIN = "JOIN";
-    public final static String JOINNED = "JOINNED";
-    public final static String FAILED = "FAILED";
-	public final static String JOINREF = "JOINREF";
-	public final static String STARTGAME = "STARTGAME";
-	public final static String STARTEDGAME = "STARTEDGAME";
+
+	private Utils utils = new Utils( this );
     
     private int nPlayers = 4;
 	private Team team1 = new Team(this.nPlayers/2, "white");
@@ -33,7 +29,7 @@ public class Game extends Agent {
         ServiceDescription sd  = new ServiceDescription();
         sd.setType( "game" );
         sd.setName( getLocalName() );
-        this.register( sd );
+        this.utils.register( sd );
 
         /* Does first behaviour */
 		addBehaviour( new gatherPlayers(this, this.nPlayers) );
@@ -82,10 +78,10 @@ public class Game extends Agent {
 	            	System.out.println("game caught msg!");
 	            	AID sender = msg.getSender();
 	            	System.out.println(sender);
-	                if (JOIN.equals( msg.getContent() )) {
+	                if (this.father.utils.JOIN.equals( msg.getContent() )) {
 	                	if(this.father.getTeam1().addPlayer(sender)) {
 	                		ACLMessage m = new ACLMessage( ACLMessage.INFORM );
-	                        m.setContent( JOINNED );
+	                        m.setContent( this.father.utils.JOINNED );
 	                        m.addReceiver( sender );
 	
 	                        send( m );
@@ -94,18 +90,18 @@ public class Game extends Agent {
 	                	}
 	            		else if(this.father.getTeam2().addPlayer(sender)) {
 	                		ACLMessage m = new ACLMessage( ACLMessage.INFORM );
-	                        m.setContent( FAILED );
+	                        m.setContent( this.father.utils.FAILED );
 	                        m.addReceiver( sender );
 	
 	                        send( m );      
 	                        
 	                        this.incPlayers++;          			
 	            		}
-	                } else if (JOINREF.equals( msg.getContent() )) {
+	                } else if (this.father.utils.JOINREF.equals( msg.getContent() )) {
 	                	this.father.setReferee(sender);
 	                	
 	                	ACLMessage m = new ACLMessage( ACLMessage.INFORM );
-                        m.setContent( JOINNED );
+                        m.setContent( this.father.utils.JOINNED );
                         m.addReceiver( sender );
 
                         send( m );
@@ -147,7 +143,7 @@ public class Game extends Agent {
 
 		public void action() {
 			ACLMessage m = new ACLMessage( ACLMessage.INFORM );
-			m.setContent( STARTGAME );
+			m.setContent( this.father.utils.STARTGAME );
 			m.addReceiver( this.father.referee );
 
 			send( m );
@@ -167,7 +163,7 @@ public class Game extends Agent {
 					System.out.println("game caught msg!");
 					AID sender = msg.getSender();
 					System.out.println(sender);
-					if (STARTEDGAME.equals( msg.getContent() )) {
+					if (this.father.utils.STARTEDGAME.equals( msg.getContent() )) {
 						this.flag = !this.flag;
 					}
 				} else {
@@ -206,7 +202,7 @@ public class Game extends Agent {
 			// sd.addProperties( string ou matriz do jogo! );
 			// ver properties em ../Jade_Primer/primer5.html#utilities
 
-			this.father.register( sd );
+			this.father.utils.register( sd );
 
 			while(true) {
 				try {
@@ -223,27 +219,4 @@ public class Game extends Agent {
 		private boolean finished = false;
 		public  boolean done() {  return finished;  }
 	}
-
-	/*************************************************************/
-	/*                     DF managing                           */
-	/*************************************************************/
-	void register( ServiceDescription sd )
-//  ---------------------------------
-    {
-        DFAgentDescription dfd = new DFAgentDescription();
-        dfd.setName(getAID());
-        dfd.addServices(sd);
-
-        try {  
-            DFService.register(this, dfd );  
-        }
-        catch (FIPAException fe) { fe.printStackTrace(); }
-    }
-	
-	protected void takeDown()
-//  ---------------------------------
-    {
-       try { DFService.deregister(this); }
-       catch (Exception e) {}
-    }
 }

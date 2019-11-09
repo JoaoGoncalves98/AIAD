@@ -1,5 +1,6 @@
 package Agents;
 
+import Utils.*;
 import jade.core.Agent;
 import jade.core.behaviours.*;
 import Agents.Player.joiGame;
@@ -13,12 +14,8 @@ import jade.lang.acl.ACLMessage;
 import jade.domain.FIPAException;
 
 public class Referee extends Agent {
-    public final static String JOINREF = "JOINREF";
-    public final static String JOINNED = "JOINNED";
-    public final static String FAILED = "FAILED";
-	public final static String STARTGAME = "STARTGAME";
-	public final static String STARTEDGAME = "STARTEDGAME";
-	public final static String ENDEDGAME = "ENDEDGAME";
+
+	private Utils utils = new Utils( this );
 
 	private AID agentGame = null;
 
@@ -58,10 +55,10 @@ public class Referee extends Agent {
 
 				System.out.println("searching game");
 
-				this.agentGame = getService("game");
+				this.agentGame = this.father.utils.getService("game");
 
 				ACLMessage m = new ACLMessage( ACLMessage.INFORM );
-				m.setContent( JOINREF );
+				m.setContent( this.father.utils.JOINREF );
 				m.addReceiver( this.agentGame );
 				this.father.setGame( this.agentGame );
 
@@ -90,10 +87,10 @@ public class Referee extends Agent {
 				if (msg != null) {
 					System.out.println("referee caught msg!");
 					AID sender = msg.getSender();
-					if (JOINNED.equals( msg.getContent() )) {
+					if (this.father.utils.JOINNED.equals( msg.getContent() )) {
 						System.out.println("Referee joined game!");
 						this.joinned = true;
-					} else if (FAILED.equals( msg.getContent() )) {
+					} else if (this.father.utils.FAILED.equals( msg.getContent() )) {
 						System.out.println("Error couldn't join a game!");
 					} else {
 						System.out.println("Got the wrong message?!?");
@@ -137,12 +134,12 @@ public class Referee extends Agent {
 				if (msg != null) {
 					System.out.println("referee caught msg!");
 					AID sender = msg.getSender();
-					if (STARTGAME.equals( msg.getContent() )) {
+					if (this.father.utils.STARTGAME.equals( msg.getContent() )) {
 						System.out.println("Referee will start the clock!");
 						this.flag = !this.flag;
 
 						ACLMessage m = new ACLMessage( ACLMessage.INFORM );
-						m.setContent( STARTEDGAME );
+						m.setContent( this.father.utils.STARTEDGAME );
 						m.addReceiver( this.father.agentGame );
 
 						send( m );
@@ -182,7 +179,7 @@ public class Referee extends Agent {
 			System.out.println("Referee stopped the clock! Ending GAME!");
 
 			ACLMessage m = new ACLMessage( ACLMessage.INFORM );
-			m.setContent( ENDEDGAME );
+			m.setContent( this.father.utils.ENDEDGAME );
 			m.addReceiver( this.father.agentGame );
 
 			send( m );
@@ -192,45 +189,5 @@ public class Referee extends Agent {
 
 		private boolean finished = false;
 		public  boolean done() {  return finished;  }
-	}
-	
-	/*************************************************************/
-	/*                     DF managing                           */
-	/*************************************************************/
-	void register( ServiceDescription sd)
-//  ---------------------------------
-    {
-        DFAgentDescription dfd = new DFAgentDescription();
-        dfd.setName(getAID());
-        dfd.addServices(sd);
-
-        try {  
-            DFService.register(this, dfd );  
-        }
-        catch (FIPAException fe) { fe.printStackTrace(); }
-    }
-	
-	protected void takeDown() 
-//  ---------------------------------
-    {
-       try { DFService.deregister(this); }
-       catch (Exception e) {}
-    }
-	
-	AID getService( String service )
-//  ---------------------------------
-	{
-		DFAgentDescription dfd = new DFAgentDescription();
-   		ServiceDescription sd = new ServiceDescription();
-   		sd.setType( service );
-		dfd.addServices(sd);
-		try
-		{
-			DFAgentDescription[] result = DFService.search(this, dfd);
-			if (result.length>0)
-				return result[0].getName() ;
-		}
-        catch (FIPAException fe) { fe.printStackTrace(); }
-      	return null;
 	}
 }

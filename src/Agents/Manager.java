@@ -1,5 +1,6 @@
 package Agents;
 
+import Utils.*;
 import jade.core.Agent;
 import jade.core.behaviours.*;
 import Utils.Position;
@@ -11,21 +12,24 @@ import jade.domain.FIPAAgentManagement.*;
 import jade.domain.FIPAException;
 
 public class Manager extends Agent {
+
+    private Utils utils = new Utils( this );
     
 	protected void setup()
     {
         addBehaviour( new manageTeam(this) );
     }
-/*************************************************************/
+
+    /*************************************************************/
     /*                  Simple Behaviours                        */
     /*************************************************************/
     class manageTeam extends SimpleBehaviour {
-        private Player father;
+        private Manager father;
         private AID agentGame = null;
 
         public manageTeam( Agent a ) {
             super(a);
-            this.father = (Player) a;
+            this.father = (Manager) a;
         }
 
         public void action()
@@ -36,7 +40,7 @@ public class Manager extends Agent {
 
                 System.out.println("game started?");
 
-                this.agentGame = getService("gamestarted");
+                this.agentGame = this.father.utils.getService("gamestarted");
 
                 try {
                     Thread.sleep(1000);
@@ -62,45 +66,5 @@ public class Manager extends Agent {
 
         private boolean finished = false;
         public  boolean done() {  return finished;  }
-    }
-
-    /*************************************************************/
-    /*                     DF managing                           */
-    /*************************************************************/
-    void register( ServiceDescription sd)
-//  ---------------------------------
-    {
-        DFAgentDescription dfd = new DFAgentDescription();
-        dfd.setName(getAID());
-        dfd.addServices(sd);
-
-        try {
-            DFService.register(this, dfd );
-        }
-        catch (FIPAException fe) { fe.printStackTrace(); }
-    }
-
-    protected void takeDown()
-//  ---------------------------------
-    {
-        try { DFService.deregister(this); }
-        catch (Exception e) {}
-    }
-
-    AID getService( String service )
-//  ---------------------------------
-    {
-        DFAgentDescription dfd = new DFAgentDescription();
-        ServiceDescription sd = new ServiceDescription();
-        sd.setType( service );
-        dfd.addServices(sd);
-        try
-        {
-            DFAgentDescription[] result = DFService.search(this, dfd);
-            if (result.length>0)
-                return result[0].getName() ;
-        }
-        catch (FIPAException fe) { fe.printStackTrace(); }
-        return null;
     }
 }
