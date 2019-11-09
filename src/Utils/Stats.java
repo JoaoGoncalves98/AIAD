@@ -1,7 +1,8 @@
 package Utils;
 
 public class Stats {
-    private int scorePercentage = 50;
+    private int insideScorePercentage = 50;
+	private int outsideScorePercentage = 50;
     private int passPercentage = 50;
     private int dribblePercentage = 50;
     private int stealPercentage = 50;
@@ -18,19 +19,22 @@ public class Stats {
 */
     public Stats(int i) {
     	switch(i) {
-    	case 0: // Scorer
-    		this.scorePercentage = 80; 		
+    	case 0: // Inside Scorer
+    		this.insideScorePercentage = 80;
     	    break;
-    	case 1: // Passer
+    	case 1: // Inside Scorer
+			this.outsideScorePercentage = 80;
+			break;
+    	case 2: // Passer
     		this.passPercentage = 80;
     	    break;
-    	case 2: // Dribbler
+    	case 3: // Dribbler
     		this.dribblePercentage = 80;
     		break;
-    	case 3: // Stealer
+    	case 4: // Stealer
     		this.stealPercentage = 80;
     		break;
-    	case 4: // Intercepter
+    	case 5: // Intercepter
     		this.interceptPercentage = 80;
     		break;
 		default: // Normal
@@ -38,8 +42,11 @@ public class Stats {
     	}
     }
     
-    public int getscorePercentage() {
-		return this.scorePercentage;
+    public int getInsideScorePercentage() {
+		return this.insideScorePercentage;
+	}
+	public int getOutsideScorePercentage() {
+		return this.outsideScorePercentage;
 	}
 	public int getpassPercentage() {
 		return this.passPercentage;

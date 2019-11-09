@@ -1,2 +1,3 @@
 .idea/
 *.iml
+bin/Agents/Game$gatherPlayers.class
