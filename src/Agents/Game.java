@@ -1,20 +1,12 @@
 package Agents;
 
-import jade.core.Agent;
-import jade.core.behaviours.*;
 
 import Utils.*;
+import jade.core.Agent;
+import jade.core.behaviours.*;
 import jade.core.AID;
-
 import jade.lang.acl.ACLMessage;
-import jade.lang.acl.MessageTemplate;
-
-import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.*;
-import jade.domain.FIPAException;
-import jade.wrapper.AgentController;
-import jade.wrapper.ContainerController;
-import jade.wrapper.StaleProxyException;
 
 public class Game extends Agent {
 
@@ -181,7 +173,7 @@ public class Game extends Agent {
 
 	/*************************************************************/
 	/*                  Simple Behaviours                        */
-	/*					 Warn Referee							 */
+	/*					 Regulating Game						 */
 	/*************************************************************/
 
 	class regulatingGame extends SimpleBehaviour {

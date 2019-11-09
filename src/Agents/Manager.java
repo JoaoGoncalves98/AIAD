@@ -3,13 +3,7 @@ package Agents;
 import Utils.*;
 import jade.core.Agent;
 import jade.core.behaviours.*;
-import Utils.Position;
-import Utils.Stats;
 import jade.core.AID;
-
-import jade.domain.DFService;
-import jade.domain.FIPAAgentManagement.*;
-import jade.domain.FIPAException;
 
 public class Manager extends Agent {
 

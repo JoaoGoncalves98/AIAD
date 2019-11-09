@@ -2,17 +2,10 @@ package Agents;
 
 import jade.core.Agent;
 
-import jade.core.behaviours.*;
-import Agents.Game.gatherPlayers;
 import Utils.*;
+import jade.core.behaviours.*;
 import jade.core.AID;
-
 import jade.lang.acl.ACLMessage;
-import jade.lang.acl.MessageTemplate;
-
-import jade.domain.DFService;
-import jade.domain.FIPAAgentManagement.*;
-import jade.domain.FIPAException;
 
 public class Player extends Agent {
 
@@ -46,6 +39,7 @@ public class Player extends Agent {
 
 	/*************************************************************/
 	/*                  Simple Behaviours                        */
+	/*					   Join Game    						 */
 	/*************************************************************/
 	class joiGame extends SimpleBehaviour {
 		private Player father;
@@ -115,6 +109,7 @@ public class Player extends Agent {
 
 	/*************************************************************/
 	/*                  Simple Behaviours                        */
+	/*					  Playing Game    						 */
 	/*************************************************************/
 	class playingGame extends SimpleBehaviour {
 		private Player father;
@@ -161,8 +156,10 @@ public class Player extends Agent {
 		public  boolean done() {  return finished;  }
 	}
 
-	/************************************************************/
-	/*                     Gets and Sets                         */
+
+	/*************************************************************/
+	/*                  Simple Behaviours                        */
+	/*					  Gets and Sets    						 */
 	/*************************************************************/
 	public Stats getStats() {
 		return stats;
