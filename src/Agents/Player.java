@@ -36,8 +36,12 @@ public class Player extends Agent {
 		} else {
         	System.out.println("Wrong arguments - will be a normal player (standard stats)");
         }
-		
-        addBehaviour( new joiGame(this) );
+
+		// does first behaviour!
+		addBehaviour( new joiGame(this) );
+
+		// does second behaviour!
+		addBehaviour( new playingGame(this) );
         
     }
 
@@ -48,66 +52,114 @@ public class Player extends Agent {
 		private Player father;
 		private AID agentGame = null;
 		private boolean joinned = false;
-	    
-	    public joiGame( Agent a ) {
-	    	super(a);
-	    	this.father = (Player) a;
-	    }
-	    
-		public void action() 
-        {
-			
+
+		public joiGame( Agent a ) {
+			super(a);
+			this.father = (Player) a;
+		}
+
+		public void action()
+		{
+
 			// Search Game
 			while(this.agentGame == null) {
 
-	        	System.out.println("searching game");
-	        	
-	        	this.agentGame = getService("game");
-				
+				System.out.println("searching game");
+
+				this.agentGame = getService("game");
+
 				ACLMessage m = new ACLMessage( ACLMessage.INFORM );
-		        m.setContent( JOIN );
-		        m.addReceiver( this.agentGame );
-	
-		        send( m );
-		        
-		        try {
-	                Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}				
-			}
-			
-	        while(!this.joinned) {
-	        	
-	        	try {
-	                Thread.sleep(1000);
+				m.setContent( JOIN );
+				m.addReceiver( this.agentGame );
+
+				send( m );
+
+				try {
+					Thread.sleep(1000);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-	        	System.out.println("running player");
-	        	
-	        	ACLMessage msg = receive();
+			}
 
-	            if (msg != null) {
-	            	System.out.println("player caught msg!");
-	            	AID sender = msg.getSender();
-	            	 if (JOINNED.equals( msg.getContent() )) {
-	         			System.out.println("Joined game!");  
-	         			this.joinned = true;
-	            	 } else if (FAILED.equals( msg.getContent() )) {
-	         			System.out.println("Error couldn't join a game!");
-	            	 } else {
-	          			System.out.println("Got the wrong message?!?");            		 
-	            	 }
-	            }
-	        }
-        	this.finished = true;
-        }
-		
-        private boolean finished = false;
-        public  boolean done() {  return finished;  }
+			while(!this.joinned) {
+
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				System.out.println("running player");
+
+				ACLMessage msg = receive();
+
+				if (msg != null) {
+					System.out.println("player caught msg!");
+					AID sender = msg.getSender();
+					if (JOINNED.equals( msg.getContent() )) {
+						System.out.println("Joined game!");
+						this.joinned = true;
+					} else if (FAILED.equals( msg.getContent() )) {
+						System.out.println("Error couldn't join a game!");
+					} else {
+						System.out.println("Got the wrong message?!?");
+					}
+				}
+			}
+			this.finished = true;
+		}
+
+		private boolean finished = false;
+		public  boolean done() {  return finished;  }
+	}
+
+	/*************************************************************/
+	/*                  Simple Behaviours                        */
+	/*************************************************************/
+	class playingGame extends SimpleBehaviour {
+		private Player father;
+		private AID agentGame = null;
+		private boolean joinned = false;
+
+		public playingGame( Agent a ) {
+			super(a);
+			this.father = (Player) a;
+		}
+
+		public void action()
+		{
+			// Check if Game started
+			while(this.agentGame == null) {
+
+				System.out.println("game started?");
+
+				this.agentGame = getService("gamestarted");
+
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+
+			while(true) {
+
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				System.out.println("running player");
+
+			}
+			// this.finished = true;
+		}
+
+		private boolean finished = false;
+		public  boolean done() {  return finished;  }
 	}
 	
 	/*************************************************************/
