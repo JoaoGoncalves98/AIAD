@@ -65,7 +65,7 @@ public class Game extends Agent {
 	            }
 	            catch (Exception e) {}
 	            
-	        	System.out.println("running game");
+	        	System.out.println("running game" + " players" + this.incPlayers + " ref" + this.incReferee + " mans" + this.incManagers);
 	        	
 	            if (msg != null) {
 	            	System.out.println("game caught msg!");
@@ -102,7 +102,7 @@ public class Game extends Agent {
 						this.incReferee++;
 
 					} else if (Utils.JOINMAN.equals( msg.getContent() )) {
-						if(this.father.team1.hasManager()) {
+						if(!this.father.team1.hasManager()) {
 							ACLMessage m = new ACLMessage( ACLMessage.INFORM );
 							m.setContent(Utils.JOINNED);
 							m.addReceiver( sender );
@@ -111,7 +111,7 @@ public class Game extends Agent {
 
 							this.incManagers++;
 							this.father.team1.setManager( sender );
-						} else if(this.father.team2.hasManager()) {
+						} else if(!this.father.team2.hasManager()) {
 							ACLMessage m = new ACLMessage( ACLMessage.INFORM );
 							m.setContent(Utils.JOINNED);
 							m.addReceiver( sender );
@@ -136,14 +136,12 @@ public class Game extends Agent {
 	            }
 			}
         	System.out.println("All players were gathered");
+			this.father.takeDown(); // Deletes DF entry
         	this.finished = true;
         }
 		
         private boolean finished = false;
-        public  boolean done() {
-			this.father.takeDown(); // Deletes DF entry
-			return finished;
-        }
+        public  boolean done() { return finished; }
 	}
 
 	/*************************************************************/

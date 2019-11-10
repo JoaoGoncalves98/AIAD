@@ -10,7 +10,7 @@ import jade.domain.FIPAException;
 public class Utils {
     public final static String JOIN = "JOIN";
     public final static String JOINREF = "JOINREF";
-    public final static String JOINMAN = "JOINREF";
+    public final static String JOINMAN = "JOINMAN";
     public final static String JOINNED = "JOINMAN";
     public final static String FAILED = "FAILED";
     public final static String STARTGAME = "STARTGAME";
@@ -42,8 +42,13 @@ public class Utils {
     protected void takeDown()
 //  ---------------------------------
     {
-        try { DFService.deregister( this.agent ); }
-        catch (Exception e) {}
+        try {
+            DFService.deregister( this.agent );
+            System.out.println("DESREGISTOU CRL.....................");
+        }
+        catch (Exception e) {
+            System.out.println("NÃO DESREGISTOU CRL.....................");
+        }
     }
 
     public AID getService(String service )
