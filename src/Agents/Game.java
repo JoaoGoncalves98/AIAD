@@ -1,6 +1,5 @@
 package Agents;
 
-
 import Utils.*;
 import jade.core.Agent;
 import jade.core.behaviours.*;
@@ -15,7 +14,8 @@ public class Game extends Agent {
     private int nPlayers = 4;
 	private Team team1 = new Team(this.nPlayers/2, "white");
 	private Team team2 = new Team(this.nPlayers/2, "black");
-	private AID referee = null;	
+	private AID referee = null;
+	private BasketballCourt court = new BasketballCourt(4, 'A', 'B', 20, 10);
 	
 	protected void setup() {
         ServiceDescription sd  = new ServiceDescription();
@@ -61,7 +61,7 @@ public class Game extends Agent {
 	            ACLMessage msg = receive();
 
 	            try {
-	               Thread.sleep(2000);
+	               Thread.sleep(500);
 	            }
 	            catch (Exception e) {}
 	            
@@ -210,10 +210,8 @@ public class Game extends Agent {
 		}
 
 		public void action() {
-
-			//this.father.utils.takeDown(); // Deletes DF entry
-
 			// Função para criar game matrix
+			this.father.court.initialize();
 
 			ServiceDescription sd  = new ServiceDescription();
 			sd.setType( "gamestarted" );
@@ -228,6 +226,8 @@ public class Game extends Agent {
 					Thread.sleep(3000);
 				}
 				catch (Exception e) {}
+
+				this.father.court.printCourt();
 				System.out.println("READY FOR CALCULATIONS!");
 				// TODO: 08/11/2019
 			}

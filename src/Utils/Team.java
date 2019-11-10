@@ -4,10 +4,7 @@ import Agents.*;
 
 import java.util.ArrayList;
 
-import jade.core.Agent;
 import jade.core.AID;
-import jade.wrapper.AgentController;
-import jade.wrapper.ContainerController;
 
 public class Team {
 	private ArrayList<AID> players = new ArrayList<AID>();
