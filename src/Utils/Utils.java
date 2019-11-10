@@ -39,7 +39,7 @@ public class Utils {
         catch (FIPAException fe) { fe.printStackTrace(); }
     }
 
-    protected void takeDown()
+    public void takeDown()
 //  ---------------------------------
     {
         try {

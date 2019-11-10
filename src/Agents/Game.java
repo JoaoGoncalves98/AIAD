@@ -136,7 +136,7 @@ public class Game extends Agent {
 	            }
 			}
         	System.out.println("All players were gathered");
-			this.father.takeDown(); // Deletes DF entry
+			this.father.utils.takeDown(); // Deletes DF entry
         	this.finished = true;
         }
 		
@@ -210,6 +210,8 @@ public class Game extends Agent {
 		}
 
 		public void action() {
+
+			//this.father.utils.takeDown(); // Deletes DF entry
 
 			// Função para criar game matrix
 
