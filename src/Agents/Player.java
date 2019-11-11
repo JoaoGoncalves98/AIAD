@@ -139,6 +139,7 @@ public class Player extends Agent {
 			}
 
 			while(true) {
+				// here retrieve court
 
 				try {
 					Thread.sleep(1000);

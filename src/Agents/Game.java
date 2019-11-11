@@ -210,16 +210,38 @@ public class Game extends Agent {
 		}
 
 		public void action() {
+
 			// Função para criar game matrix
 			this.father.court.initialize();
 
 			ServiceDescription sd  = new ServiceDescription();
 			sd.setType( "gamestarted" );
 			sd.setName( getLocalName() );
-			// sd.addProperties( string ou matriz do jogo! );
-			// ver properties em ../Jade_Primer/primer5.html#utilities
 
 			this.father.utils.register( sd );
+
+			// Broadcast !!!
+
+			/*
+			While ref hasn't ended game
+			For each player 1 to N
+			team1
+			team2
+
+			send court
+								recieve
+								choose play
+								send play
+			recieve play
+			see if possible
+			If has prob calculate else skip
+			Send success or failure
+								recieve answer
+
+			For each manager
+				Send Results
+				Reacto to results sending messages to players
+			*/
 
 			while(true) {
 				try {
