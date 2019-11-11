@@ -127,7 +127,7 @@ public class Manager extends Agent {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
-                System.out.println("running manager");
+                System.out.println("Ready to MANAGE TEAM!");
 
             }
             // this.finished = true;

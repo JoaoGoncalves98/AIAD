@@ -146,8 +146,7 @@ public class Player extends Agent {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				System.out.println("running player");
-
+				System.out.println("Ready to PLAY GAME!");
 			}
 			// this.finished = true;
 		}
