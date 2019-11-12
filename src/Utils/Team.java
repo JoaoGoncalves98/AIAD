@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import jade.core.AID;
 
 public class Team {
-	private ArrayList<AID> players = new ArrayList<AID>();
+	public ArrayList<AID> players = new ArrayList<AID>();
 	private ArrayList<Player> playersInfo = new ArrayList<>(); //ainda esta vazio
 	private int nPlayers = 0;
 	private String name;

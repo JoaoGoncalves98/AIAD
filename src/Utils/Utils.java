@@ -16,6 +16,10 @@ public class Utils {
     public final static String STARTGAME = "STARTGAME";
     public final static String STARTEDGAME = "STARTEDGAME";
     public final static String ENDEDGAME = "ENDEDGAME";
+    public final static String PLAY = "PLAY";
+    public final static String RUN = "RUN";
+    public final static String PASS = "PASS";
+    public final static String LAUNCH = "LAUNCH";
 
     private Agent agent = null;
 

@@ -7,6 +7,8 @@ import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import jade.domain.FIPAAgentManagement.*;
 
+import java.io.IOException;
+
 public class Game extends Agent {
 
 	private Utils utils = new Utils( this );
@@ -70,7 +72,7 @@ public class Game extends Agent {
 	            if (msg != null) {
 	            	System.out.println("game caught msg!");
 	            	AID sender = msg.getSender();
-	            	System.out.println(sender);
+	            	System.out.println(sender.getLocalName());
 	                if (Utils.JOIN.equals( msg.getContent() )) {
 	                	if(this.father.getTeam1().addPlayer(sender)) {
 	                		ACLMessage m = new ACLMessage( ACLMessage.INFORM );
@@ -195,34 +197,113 @@ public class Game extends Agent {
 		private boolean finished = false;
 		public  boolean done() {  return finished;  }
 	}
+		/*************************************************************/
+		/*                  Simple Behaviours                        */
+		/*					 Regulating Game						 */
+		/*************************************************************/
 
-	/*************************************************************/
-	/*                  Simple Behaviours                        */
-	/*					 Regulating Game						 */
-	/*************************************************************/
+		class regulatingGame extends SimpleBehaviour {
+			private Game father;
+			private boolean gameGoing = true;
 
-	class regulatingGame extends SimpleBehaviour {
-		private Game father;
+			public regulatingGame( Agent a ) {
+				super(a);
+				this.father = (Game) a;
+			}
 
-		public regulatingGame( Agent a ) {
-			super(a);
-			this.father = (Game) a;
-		}
+			public void action() {
 
-		public void action() {
+				// Função para criar game matrix
+				this.father.court.initialize();
 
-			// Função para criar game matrix
-			this.father.court.initialize();
+				ServiceDescription sd  = new ServiceDescription();
+				sd.setType( "gamestarted" );
+				sd.setName( getLocalName() );
 
-			ServiceDescription sd  = new ServiceDescription();
-			sd.setType( "gamestarted" );
-			sd.setName( getLocalName() );
+				this.father.utils.register( sd );
 
-			this.father.utils.register( sd );
+				// Broadcast !!!
+				while(this.gameGoing) {
+				    // VE SAE JOGO JA ACABOU
+                    ACLMessage msg0 = receive();
+                    if (msg0 != null) {
+                        //AID sender = msg.getSender();
+                        //System.out.println(sender);
+                        if (Utils.ENDEDGAME.equals( msg0.getContent() )) {
+                            this.gameGoing = !this.gameGoing;
+                            this.father.utils.takeDown(); // Deletes DF entry
+                        }
+                    } else {
+                        // if no message is arrived, block the behaviour
+                        block();
+                    }
+                    try { Thread.sleep(1000); } catch (Exception e) {}
 
-			// Broadcast !!!
+                    this.father.court.printCourt();
 
-			/*
+                    // JOGADA AGENTE A AGENTE
+                    Team team = null;
+					for(int i = 0 ; i < this.father.nPlayers ; i++) {
+
+					    if (i%2 == 0)
+					        team = this.father.team1;
+					    else
+                            team = this.father.team2;
+
+                        ACLMessage m1 = new ACLMessage( ACLMessage.INFORM );
+                        m1.setContent( Utils.PLAY );
+                        m1.addReceiver( team.players.get(i/2) );
+                        send( m1 );
+                        try {
+                            m1.setContentObject( this.father.court );
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        m1.addReceiver( team.players.get(i/2) );
+                        send( m1 );
+
+                        boolean f = true;
+                        while(f) {
+                            ACLMessage msg = receive();
+                            System.out.println("GAME WAITING FOR" + team.players.get(i/2));
+                            if (msg != null) {
+                                AID player = msg.getSender();
+                                if (player == team.players.get(i/2)) {
+                                    String content = (String) msg.getContent();
+                                    if (content.contains(Utils.RUN)) {
+                                        // process run
+                                        System.out.println(player.getLocalName() + " wants to run");
+                                        f = false;
+                                    } else if (content.contains(Utils.PASS)) {
+                                        // process pass
+                                        System.out.println(player.getLocalName() + " wants to pass");
+                                        f = false;
+                                    } else if (content.contains(Utils.LAUNCH)) {
+                                        // process launch
+                                        System.out.println(player.getLocalName() + " wants to launch");
+                                        f = false;
+                                    }
+                                } else {
+                                    System.out.println("Wrong player to choose play!");
+                                }
+                            } else {
+                                // if no message is arrived, block the behaviour
+                                block();
+                            }
+                            try { Thread.sleep(1000); } catch (Exception e) {}
+                        }
+                    }
+                }
+				this.finished = true;
+			}
+
+
+			private boolean finished = false;
+		public  boolean done() {  return finished;  }
+	}
+}
+
+/*
 			While ref hasn't ended game
 			For each player 1 to N
 			team1
@@ -240,24 +321,5 @@ public class Game extends Agent {
 
 			For each manager
 				Send Results
-				Reacto to results sending messages to players
-			*/
-
-			while(true) {
-				try {
-					Thread.sleep(3000);
-				}
-				catch (Exception e) {}
-
-				this.father.court.printCourt();
-				System.out.println("READY FOR CALCULATIONS!");
-				// TODO: 08/11/2019
-			}
-
-			// this.finished = true;
-		}
-
-		private boolean finished = false;
-		public  boolean done() {  return finished;  }
-	}
-}
+				React to results sending messages to players
+*/

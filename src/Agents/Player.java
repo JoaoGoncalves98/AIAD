@@ -6,6 +6,7 @@ import Utils.*;
 import jade.core.behaviours.*;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
+import jade.lang.acl.UnreadableException;
 
 public class Player extends Agent {
 
@@ -125,18 +126,43 @@ public class Player extends Agent {
 		{
 			// Check if Game started
 			while(this.agentGame == null) {
-
-				System.out.println("game started?");
-
+				// ESPERANDO Q O JOGO COMECE
 				this.agentGame = this.father.utils.getService("gamestarted");
-
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				System.out.println("game started?");
+				try { Thread.sleep(1000);} catch (InterruptedException e) { e.printStackTrace(); }
 			}
+
+			while(this.agentGame != null) {
+				this.agentGame = this.father.utils.getService("gamestarted");
+				ACLMessage msg = receive();
+				if (msg != null) {
+					AID sender = msg.getSender();
+					if (Utils.PLAY.equals(msg.getContent())) {
+						boolean f = true;
+						while (f) {
+							ACLMessage msg2 = receive();
+							if (msg2 != null) {
+								try {
+									BasketballCourt court = (BasketballCourt) msg2.getContentObject();
+
+									if(court.hasBall(getLocalName()))
+										System.out.println("has ball");
+									else
+										System.out.println("hasn't ball");
+
+								} catch (UnreadableException e) {
+									e.printStackTrace();
+								}
+							}
+						}
+					}
+				} else {
+					// if no message is arrived, block the behaviour
+					block();
+				}
+				try { Thread.sleep(1000);} catch (InterruptedException e) { e.printStackTrace(); }
+			}
+
 
 			while(true) {
 				// here retrieve court

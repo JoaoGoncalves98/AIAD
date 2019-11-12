@@ -7,7 +7,6 @@ import jade.wrapper.StaleProxyException;
 
 public class ToRun  extends Agent {
     protected void setup() {
-
         ContainerController containerController = getContainerController();
 
         try {
@@ -26,13 +25,13 @@ public class ToRun  extends Agent {
             managerController.start();
 
             // CREATING PLAYERS
-            AgentController playerController = containerController.createNewAgent("p01", "Agents.Player", null);
+            AgentController playerController = containerController.createNewAgent("a1", "Agents.Player", null);
             playerController.start();
-            playerController = containerController.createNewAgent("p02", "Agents.Player", null);
+            playerController = containerController.createNewAgent("a2", "Agents.Player", null);
             playerController.start();
-            playerController = containerController.createNewAgent("p03", "Agents.Player", null);
+            playerController = containerController.createNewAgent("b1", "Agents.Player", null);
             playerController.start();
-            playerController = containerController.createNewAgent("p04", "Agents.Player", null);
+            playerController = containerController.createNewAgent("b2", "Agents.Player", null);
             playerController.start();
         } catch (StaleProxyException e) {
             e.printStackTrace();

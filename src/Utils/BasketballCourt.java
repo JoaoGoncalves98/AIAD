@@ -1,6 +1,9 @@
 package Utils;
 
-public class BasketballCourt {
+import java.io.Serializable;
+import java.util.concurrent.ThreadLocalRandom;
+
+public class BasketballCourt implements Serializable {
     private int nPlayers = 0;
     private String court[][];
     private char team1C;
@@ -14,6 +17,7 @@ public class BasketballCourt {
     }
 
     public void initialize() {
+        int randomNum = ThreadLocalRandom.current().nextInt(1, this.nPlayers + 1);
         for (int i = 0 ; i < this.court.length ; i++)
             for (int j = 0 ; j < this.court[0].length ; j++)
                 this.court[i][j] = "  ";
@@ -23,13 +27,19 @@ public class BasketballCourt {
                 if( (i == 0 && (j == this.court[0].length / 3 || j == this.court[0].length *2 / 3)) ||
                         (i == 2 && (j == this.court[0].length / 4 || j == this.court[0].length *2 / 4 || j == this.court[0].length *3 / 4))) {
                     inc++;
-                    this.court[i][j] = this.team1C + Integer.toString(inc);
+                    if(inc == randomNum)
+                        this.court[i][j] = this.team1C + Integer.toString(inc);
+                    else
+                        this.court[i][j] = Character.toLowerCase(this.team1C) + Integer.toString(inc);
                 }
         for (int i = this.court.length-1 ; i >= 0 && inc > 0 ; i--)
             for (int j = 0 ; j < this.court[0].length-1 && inc > 0 ; j++)
                 if( (i == this.court.length-1 && (j == this.court[0].length / 3 || j == this.court[0].length *2 / 3)) ||
                     (i == this.court.length-3 && (j == this.court[0].length / 4 || j == this.court[0].length *2 / 4 || j == this.court[0].length *3 / 4))) {
-                    this.court[i][j] = this.team2C + Integer.toString(inc);
+                    if(this.nPlayers/2 + inc == randomNum)
+                        this.court[i][j] = this.team2C + Integer.toString(inc);
+                    else
+                        this.court[i][j] = Character.toLowerCase(this.team2C) + Integer.toString(inc);
                     inc--;
                 }
     }
@@ -44,11 +54,25 @@ public class BasketballCourt {
 
         System.out.println("  ");
         for (int j = 0 ; j < this.court[0].length ; j++) {
-            System.out.print(j +" |  ");
+            if(j == 5)
+                System.out.print(j + " O  ");
+            else
+                System.out.print(j + " |  ");
             for (int i = 0 ; i < this.court.length ; i++) {
                 System.out.print(this.court[i][j] + "  ");
             }
-            System.out.println("|");
+            if(j == 5)
+                System.out.println(j + "O");
+            else
+                System.out.println(j + "|");
         }
+    }
+
+    public boolean hasBall( String s ) {
+        for(int i = 0 ; i < this.court.length ; i++)
+            for(int j = 0 ; j < this.court[0].length ; j++ )
+                if(s.toUpperCase() == this.court[i][j])
+                    return true;
+        return false;
     }
 }
