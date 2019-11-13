@@ -107,7 +107,7 @@ public class Game extends Agent {
 						this.incReferee++;
 
 					} else if (Utils.JOINMAN.equals( msg.getContent() )) {
-						if(!this.father.team1.hasManager()) {
+						if(this.father.team1.setManager( sender )) {
 							ACLMessage m = new ACLMessage( ACLMessage.INFORM );
 							m.setContent(Utils.JOINNED);
 							m.addReceiver( sender );
@@ -115,8 +115,7 @@ public class Game extends Agent {
 							send( m );
 
 							this.incManagers++;
-							this.father.team1.setManager( sender );
-						} else if(!this.father.team2.hasManager()) {
+						} else if(this.father.team2.setManager( sender )) {
 							ACLMessage m = new ACLMessage( ACLMessage.INFORM );
 							m.setContent(Utils.JOINNED);
 							m.addReceiver( sender );
@@ -294,12 +293,19 @@ public class Game extends Agent {
 										else
 											System.out.println(player.getLocalName() + " but didnt ruuuuuuuuun");
 
-
-
                                         f = false;
                                     } else if (content.contains(Utils.PASS)) {
                                         // process pass
-                                        System.out.println(player.getLocalName() + " wants to pass");
+										String[] tokens = content.split(" ");
+
+										System.out.println(player.getLocalName() + " wants to pass");
+										System.out.println(player.getLocalName() + " WANTS TO PASS TO:" + Integer.parseInt(tokens[1]) + " WITH PASS STAT OF " + Integer.parseInt(tokens[2]));
+
+										if(this.father.court.updatePos(player.getLocalName(), Integer.parseInt(tokens[1]), Integer.parseInt(tokens[2])))
+											System.out.println(player.getLocalName() + " and ruunnnnnnnnnn");
+										else
+											System.out.println(player.getLocalName() + " but didnt ruuuuuuuuun");
+
                                         f = false;
                                     } else if (content.contains(Utils.LAUNCH)) {
                                         // process launch
