@@ -140,4 +140,14 @@ public class BasketballCourt implements Serializable {
         }
         return false;
     }
+
+    public boolean makePass( String passer, String toPass, int passStat ) {
+        int[] posPasser = this.getPos( passer );
+        int[] posToPass = this.getPos( toPass );
+        boolean intercepter = false;
+
+
+
+        return  false;
+    }
 }

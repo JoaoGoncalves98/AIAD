@@ -34,8 +34,12 @@ public class Team {
 		return false;
 	}
 
-	public void setManager ( AID man ) {
-		this.manager = man;
+	public boolean setManager ( AID man ) {
+		if(!this.hasManager() &&  man.getLocalName().toLowerCase().contains(this.name.toLowerCase())) {
+			this.manager = man;
+			return true;
+		}
+		return false;
 	}
 	public AID getManager () {
 		return this.manager;

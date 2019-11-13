@@ -6,7 +6,6 @@ public class Stats {
     private int passPercentage = 50;
     private int dribblePercentage = 50;
     private int stealPercentage = 50;
-    private int interceptPercentage = 50;
     
 /*	
   	public Stats(int score, int pass, int dribble, int steal, int intercept) {
@@ -34,9 +33,6 @@ public class Stats {
     	case 4: // Stealer
     		this.stealPercentage = 80;
     		break;
-    	case 5: // Intercepter
-    		this.interceptPercentage = 80;
-    		break;
 		default: // Normal
 			break;
     	}
@@ -56,8 +52,5 @@ public class Stats {
 	}
 	public int getstealPercentage() {
 		return this.stealPercentage;
-	}
-	public int getinterceptPercentage() {
-		return this.interceptPercentage;
 	}
 }
