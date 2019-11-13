@@ -14,8 +14,8 @@ public class Game extends Agent {
 	private Utils utils = new Utils( this );
     
     private int nPlayers = 4;
-	private Team team1 = new Team(this.nPlayers/2, "white");
-	private Team team2 = new Team(this.nPlayers/2, "black");
+	private Team team1 = new Team(this.nPlayers/2, "A");
+	private Team team2 = new Team(this.nPlayers/2, "B");
 	private AID referee = null;
 	private BasketballCourt court = new BasketballCourt(4, 'A', 'B', 20, 10);
 	
@@ -82,16 +82,19 @@ public class Game extends Agent {
 	                        send( m );
 	                        
 	                        this.incPlayers++;
-	                	}
-	            		else if(this.father.getTeam2().addPlayer(sender)) {
+							System.out.println("SUCCESSED TO ALOCATE PLAYER TO TEAMA");
+	                	} else if(this.father.getTeam2().addPlayer(sender)) {
 	                		ACLMessage m = new ACLMessage( ACLMessage.INFORM );
-	                        m.setContent(Utils.FAILED);
+	                        m.setContent(Utils.JOINNED);
 	                        m.addReceiver( sender );
 	
-	                        send( m );      
+	                        send( m );
 	                        
-	                        this.incPlayers++;          			
-	            		}
+	                        this.incPlayers++;
+							System.out.println("SUCCESSED TO ALOCATE PLAYER TO TEAMB");
+	            		} else {
+	                		System.out.println("FAILED TO ALOCATE PLAYER TO TEAM");
+						}
 	                } else if (Utils.JOINREF.equals( msg.getContent() )) {
 						this.father.setReferee(sender);
 
@@ -239,11 +242,12 @@ public class Game extends Agent {
                     }
                     try { Thread.sleep(1000); } catch (Exception e) {}
 
-                    this.father.court.printCourt();
-
                     // JOGADA AGENTE A AGENTE
                     Team team = null;
 					for(int i = 0 ; i < this.father.nPlayers ; i++) {
+
+						// IMPRIME COURT
+						this.father.court.printCourt();
 
 					    if (i%2 == 0)
 					        team = this.father.team1;
@@ -252,6 +256,9 @@ public class Game extends Agent {
 
                         ACLMessage m1 = new ACLMessage( ACLMessage.INFORM );
                         m1.setContent( Utils.PLAY );
+						System.out.println("TEAM = " + team);
+						System.out.println("TEAM PLAYERS = " + team.players);
+						System.out.println("INDEX = " + i/2);
                         m1.addReceiver( team.players.get(i/2) );
                         send( m1 );
                         try {
@@ -268,11 +275,27 @@ public class Game extends Agent {
                             System.out.println("GAME WAITING FOR" + team.players.get(i/2));
                             if (msg != null) {
                                 AID player = msg.getSender();
-                                if (player == team.players.get(i/2)) {
+								System.out.println("GAME CAUGHT MSG! From " + player.getLocalName());
+								System.out.println("AND I IS = " + i);
+								System.out.println("AND I/2 IS = " + i/2);
+								System.out.println("AID sent to is = " + team.players.get(i/2));
+								System.out.println("AID received from is = " + player);
+                                if (player.getLocalName().equals(team.players.get(i / 2).getLocalName())) {
                                     String content = (String) msg.getContent();
                                     if (content.contains(Utils.RUN)) {
                                         // process run
-                                        System.out.println(player.getLocalName() + " wants to run");
+										String[] tokens = content.split(" ");
+
+										System.out.println(player.getLocalName() + " wants to run");
+										System.out.println(player.getLocalName() + " WANTS TO RUN TO:" + Integer.parseInt(tokens[1]) + " " + Integer.parseInt(tokens[2]));
+
+										if(this.father.court.updatePos(player.getLocalName(), Integer.parseInt(tokens[1]), Integer.parseInt(tokens[2])))
+											System.out.println(player.getLocalName() + " and ruunnnnnnnnnn");
+										else
+											System.out.println(player.getLocalName() + " but didnt ruuuuuuuuun");
+
+
+
                                         f = false;
                                     } else if (content.contains(Utils.PASS)) {
                                         // process pass

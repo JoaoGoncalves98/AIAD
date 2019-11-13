@@ -92,7 +92,7 @@ public class Player extends Agent {
 					System.out.println("player caught msg!");
 					AID sender = msg.getSender();
 					if (Utils.JOINNED.equals( msg.getContent() )) {
-						System.out.println("Joined game!");
+						System.out.println("PLAYER JOINED GAME!");
 						this.joinned = true;
 					} else if (Utils.FAILED.equals( msg.getContent() )) {
 						System.out.println("Error couldn't join a game!");
@@ -142,7 +142,9 @@ public class Player extends Agent {
 						while (f) {
 							ACLMessage msg2 = receive();
 							if (msg2 != null) {
+								f = false;
 								try {
+									System.out.println("MSG that should be court content: " + msg2.getContentObject());
 									BasketballCourt court = (BasketballCourt) msg2.getContentObject();
 
 									if(court.hasBall(getLocalName()))
@@ -150,10 +152,37 @@ public class Player extends Agent {
 									else
 										System.out.println("hasn't ball");
 
+									if (court.openSpace(getLocalName(), 1)) {
+										System.out.println("openSpace = true; ");
+										if( getLocalName().contains("a") ) {
+											System.out.println("enterd in a team agent");
+											int pos[] = court.getPos(getLocalName());
+											System.out.println(getLocalName() + " got position and it is equals to: " + pos[0] + " " + pos[1]);
+
+											ACLMessage m = new ACLMessage( ACLMessage.INFORM );
+											m.setContent(Utils.RUN + " " + (pos[0]+1) + " " + pos[1]);
+											m.addReceiver( this.agentGame );
+
+											send( m );
+										} else {
+											System.out.println("entered in b team agent");
+											int[] pos = court.getPos(getLocalName());
+											System.out.println(getLocalName() + " got position and it is equals to: " + pos[0] + " " + pos[1]);
+
+											ACLMessage m = new ACLMessage( ACLMessage.INFORM );
+											m.setContent(Utils.RUN + " " + (pos[0]-1) + " " + pos[1]);
+											m.addReceiver( this.agentGame );
+
+											send( m );
+										}
+									}
+
+
 								} catch (UnreadableException e) {
 									e.printStackTrace();
 								}
 							}
+							try { Thread.sleep(400);} catch (InterruptedException e) { e.printStackTrace(); }
 						}
 					}
 				} else {
@@ -162,20 +191,7 @@ public class Player extends Agent {
 				}
 				try { Thread.sleep(1000);} catch (InterruptedException e) { e.printStackTrace(); }
 			}
-
-
-			while(true) {
-				// here retrieve court
-
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				System.out.println("Ready to PLAY GAME!");
-			}
-			// this.finished = true;
+			this.finished = true;
 		}
 
 		private boolean finished = false;

@@ -23,11 +23,14 @@ public class Team {
 	}
 	
 	public boolean addPlayer(AID player) {
-		if (this.players.size() < this.nPlayers) {
-			this.players.add(player);
-			this.nPlayers++;
-			return true;
-		}
+		System.out.println("PLAYER TRYING TO ENTER TEAM " +  this.name.toLowerCase() + " IS " + player.getLocalName().toLowerCase());
+		System.out.println("CONDITION CONTAINS SAYS: " + player.getLocalName().toLowerCase().contains(this.name.toLowerCase()));
+		if(player.getLocalName().toLowerCase().contains(this.name.toLowerCase()))
+			if (this.players.size() < this.nPlayers) {
+				System.out.println("TEAM " + name + "ADDED PLAYER " + player.getLocalName());
+				this.players.add(player);
+				return true;
+			}
 		return false;
 	}
 

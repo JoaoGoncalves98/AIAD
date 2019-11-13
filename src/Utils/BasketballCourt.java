@@ -71,8 +71,73 @@ public class BasketballCourt implements Serializable {
     public boolean hasBall( String s ) {
         for(int i = 0 ; i < this.court.length ; i++)
             for(int j = 0 ; j < this.court[0].length ; j++ )
-                if(s.toUpperCase() == this.court[i][j])
+                if(s.toUpperCase().equals(this.court[i][j]))
                     return true;
+        return false;
+    }
+
+    public boolean openSpace( String s, int lim ) {
+        for(int i = 0 ; i < this.court.length ; i++)
+            for(int j = 0 ; j < this.court[0].length ; j++ )
+                if(s.toUpperCase().equals(this.court[i][j]) || s.toLowerCase().equals(this.court[i][j])) {
+                    if(s.toLowerCase().contains("a")) {
+                        for(int ii = -lim ; ii < lim ; ii++)
+                            for(int jj = -lim ; jj < lim ; jj++ )
+                                if(confirmRange(i+ii,j+jj))
+                                if(!(ii == 0 && jj == 0))
+                                    if(this.court[i+ii][j+jj].toLowerCase().contains("b"))
+                                        return false;
+                    } else {
+                        for(int ii = -lim ; ii < lim ; ii++)
+                            for(int jj = -lim ; jj < lim ; jj++ )
+                                if(!(ii == 0 && jj == 0))
+                                    if(this.court[i+ii][j+jj].toLowerCase().contains("a"))
+                                        return false;
+                    }
+                    return true;
+                }
+        return true;
+    }
+
+    public int[] getPos( String s ) {
+        int[] a = {0,0};
+        for(int i = 0 ; i < this.court.length ; i++)
+            for(int j = 0 ; j < this.court[0].length ; j++ )
+                if(this.court[i][j].toLowerCase().equals(s)) {
+                    a[0]=i;
+                    a[1]=j;
+                    return a;
+                }
+        return a;
+    }
+
+    public String[][] getCourt() {
+        return  this.court;
+    }
+
+    public boolean confirmRange(int i, int j) {
+        if(i >= 0 && i < this.court.length && j >= 0 && j < this.court[0].length)
+            return true;
+        return false;
+    }
+
+    public boolean updatePos( String s, int ii, int jj) {
+        if(this.confirmRange(ii, jj) && this.court[ii][jj].equals("  ")) {
+            System.out.println("Entrou1");
+            for(int i = 0 ; i < this.court.length ; i++)
+                for(int j = 0 ; j < this.court[0].length ; j++ )
+                    if(this.court[i][j].equals(s.toUpperCase())) {
+                        System.out.println("Entrou2");
+                        this.court[i][j] = "  ";
+                        this.court[ii][jj] = s.toUpperCase();
+                        return true;
+                    } else if(this.court[i][j].equals(s)) {
+                        System.out.println("Entrou2");
+                        this.court[i][j] = "  ";
+                        this.court[ii][jj] = s;
+                        return true;
+                    }
+        }
         return false;
     }
 }
