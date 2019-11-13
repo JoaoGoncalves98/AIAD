@@ -292,6 +292,18 @@ public class BasketballCourt implements Serializable {
     public boolean makePass( String passer, String toPass, int passStat ) {
         int[] posPasser = this.getPos( passer );
         int[] posToPass = this.getPos( toPass );
+        int[] diff = {((posPasser[0]-posToPass[0])/Math.abs(posPasser[0]-posToPass[0])), ((posPasser[1]-posToPass[1])/Math.abs(posPasser[1]-posToPass[1]))};
+        boolean intercepter = false;
+        String intercepterName = "";
+
+        for(int i = posPasser[0] ; i != posToPass[0] ; i = i + diff[0])
+            for(int j = posPasser[1] ; j != posToPass[1] ; j = j + diff[1])
+                if(!(this.court[i][j].contains(""+passer.toLowerCase().charAt(0)) || this.court[i][j].equals("  "))) {
+                    intercepter = true;
+                    intercepterName = this.court[i][j];
+                }
+
+        // Now make pass!!!
 
 
 
