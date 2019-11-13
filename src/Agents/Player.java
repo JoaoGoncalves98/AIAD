@@ -160,7 +160,35 @@ public class Player extends Agent {
 											System.out.println(getLocalName() + " got position and it is equals to: " + pos[0] + " " + pos[1]);
 
 											ACLMessage m = new ACLMessage( ACLMessage.INFORM );
-											m.setContent(Utils.RUN + " " + (pos[0]+1) + " " + pos[1]);
+
+											//random para saber qual é direção que o jogador quer mover
+											double random =  Math.random()*100;
+											System.out.println("random-number is:" + random);
+											//Mover para a frente
+											if (random <=15)
+												m.setContent(Utils.RUN + " " + (pos[0]+1) + " " + pos[1]);
+											//Mover para diagonal frente direita
+											else if (random <=30)
+												m.setContent(Utils.RUN + " " + (pos[0]+1) + " " + (pos[1]+1));
+											//Mover para diagonal frente esquerda
+											else if (random <=45)
+												m.setContent(Utils.RUN + " " + (pos[0]+1) + " " + (pos[1]-1));
+											//Mover para tras
+											else if (random <=50)
+												m.setContent(Utils.RUN + " " + (pos[0]-1) + " " + pos[1]);
+											//Mover para diagonal tras direita
+											else if (random <=60)
+												m.setContent(Utils.RUN + " " + (pos[0]-1) + " " + (pos[1]+1));
+											//Mover para diagonal tras esquerda
+											else if (random <=70)
+												m.setContent(Utils.RUN + " " + (pos[0]-1) + " " + (pos[1]-1));
+											//Mover para a direita
+											else if (random <=85)
+												m.setContent(Utils.RUN + " " + pos[0] + " " + (pos[1]+1));
+											//Mover para a esquerda
+											else
+												m.setContent(Utils.RUN + " " + pos[0] + " " + (pos[1]-1));
+
 											m.addReceiver( this.agentGame );
 
 											send( m );
@@ -170,7 +198,35 @@ public class Player extends Agent {
 											System.out.println(getLocalName() + " got position and it is equals to: " + pos[0] + " " + pos[1]);
 
 											ACLMessage m = new ACLMessage( ACLMessage.INFORM );
-											m.setContent(Utils.RUN + " " + (pos[0]-1) + " " + pos[1]);
+
+											//random para saber qual é direção que o jogador quer mover
+											double random =  Math.random()*100;
+											System.out.println("random-number is:" + random);
+											//Mover para a frente
+											if (random <=15)
+												m.setContent(Utils.RUN + " " + (pos[0]+1) + " " + pos[1]);
+												//Mover para diagonal frente direita
+											else if (random <=30)
+												m.setContent(Utils.RUN + " " + (pos[0]+1) + " " + (pos[1]+1));
+												//Mover para diagonal frente esquerda
+											else if (random <=45)
+												m.setContent(Utils.RUN + " " + (pos[0]+1) + " " + (pos[1]-1));
+												//Mover para tras
+											else if (random <=50)
+												m.setContent(Utils.RUN + " " + (pos[0]-1) + " " + pos[1]);
+												//Mover para diagonal tras direita
+											else if (random <=60)
+												m.setContent(Utils.RUN + " " + (pos[0]-1) + " " + (pos[1]+1));
+												//Mover para diagonal tras esquerda
+											else if (random <=70)
+												m.setContent(Utils.RUN + " " + (pos[0]-1) + " " + (pos[1]-1));
+												//Mover para a direita
+											else if (random <=85)
+												m.setContent(Utils.RUN + " " + pos[0] + " " + (pos[1]+1));
+												//Mover para a esquerda
+											else
+												m.setContent(Utils.RUN + " " + pos[0] + " " + (pos[1]-1));
+
 											m.addReceiver( this.agentGame );
 
 											send( m );
