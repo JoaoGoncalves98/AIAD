@@ -119,16 +119,38 @@ public class Manager extends Agent {
                 }
             }
 
-            while(true) {
+            /*CICLO PARA SELECIONAR A TATICA A USAR*/
+            while(this.agentGame != null) {
+                this.agentGame = this.father.utils.getService("gamestarted");
+                ACLMessage msg = receive();
+                if(msg != null)
+                {
+                    if (Utils.SCORE.equals(msg.getContent())) {
+                        ACLMessage msg2 = receive();
+                        if (msg2 != null)
+                        {
+                            try
+                            {
+                                System.out.println("MANAGER OF TEAM " + "" + " GOT MESSAGE");
+                                int[] score = (int[]) msg2.getContentObject();
+                                System.out.println("SCORE: A:" + score[0] + " B:" + score[1]);
 
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                                //TODO
+                                // Medidante a pontuação da sua equipa ele decide qual a tática a usar
+
+                                ACLMessage m1 = new ACLMessage( ACLMessage.INFORM );
+                                m1.setContent( Utils.ACK );
+                                m1.addReceiver(this.agentGame);
+                                send(m1);
+                            }
+                            catch (Exception e)
+                            {
+                                e.printStackTrace();
+                            }
+
+                        }
+                    }
                 }
-                System.out.println("Ready to MANAGE TEAM!");
-
             }
             // this.finished = true;
         }

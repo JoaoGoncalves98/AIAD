@@ -18,6 +18,8 @@ public class Game extends Agent {
 	private Team team2 = new Team(this.nPlayers/2, "B");
 	private AID referee = null;
 	private BasketballCourt court = new BasketballCourt(4, 'A', 'B', 20, 10);
+
+	private int[] score = new int[2]; // Pontuação
 	
 	protected void setup() {
         ServiceDescription sd  = new ServiceDescription();
@@ -218,6 +220,9 @@ public class Game extends Agent {
 				// Função para criar game matrix
 				this.father.court.initialize();
 
+				this.father.score[0] = 0; // Equipa A
+				this.father.score[1] = 0; // Equipa B
+
 				ServiceDescription sd  = new ServiceDescription();
 				sd.setType( "gamestarted" );
 				sd.setName( getLocalName() );
@@ -243,6 +248,46 @@ public class Game extends Agent {
 
                     // JOGADA AGENTE A AGENTE
                     Team team = null;
+
+					/*MENSAGEM PARA OS MANAGERS DAS DUAS EQUIPAS*/
+					for (int i = 0; i < 2; i++)
+					{
+						if (i%2 == 0) {
+							team = this.father.team1;
+						}
+						else {
+							team = this.father.team2;
+						}
+
+						ACLMessage m1 = new ACLMessage( ACLMessage.INFORM );
+						m1.setContent( Utils.SCORE );
+						System.out.println("TEAM " + team + " MANAGER");
+						m1.addReceiver(team.getManager());
+						send(m1);
+						try {
+							m1.setContentObject( this.father.score );
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+						m1.addReceiver( team.getManager() );
+						send( m1 );
+
+						boolean f = true;
+						while(f)
+						{
+							ACLMessage msg = receive();
+							if(msg != null)
+							{
+								if(Utils.ACK.equals(msg.getContent()))
+								{
+									System.out.println("CONTINUE WITH THE GAME");
+									f = false;
+								}
+							}
+						}
+					}
+					/*----------------------------------------------*/
+
 					for(int i = 0 ; i < this.father.nPlayers ; i++) {
 
 						// IMPRIME COURT

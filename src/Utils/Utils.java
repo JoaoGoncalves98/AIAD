@@ -20,6 +20,10 @@ public class Utils {
     public final static String RUN = "RUN";
     public final static String PASS = "PASS";
     public final static String LAUNCH = "LAUNCH";
+    public final static String SCORE = "SCORE"; // Mensagens a usar nos managers
+    public final static String AGRESSIVE = "AGRESSIVE";
+    public final static String PASSIVE = "PASSIVE";
+    public final static String ACK = "ACK";
 
     private Agent agent = null;
 
