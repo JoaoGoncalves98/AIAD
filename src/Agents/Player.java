@@ -148,90 +148,110 @@ public class Player extends Agent {
 									BasketballCourt court = (BasketballCourt) msg2.getContentObject();
 
 									if(court.hasBall(getLocalName()))
+									{
 										System.out.println("has ball");
+										//PODE PASSAR E LANÇAR
+									}
+
 									else
 										System.out.println("hasn't ball");
 
-									if (court.openSpace(getLocalName(), 1)) {
-										System.out.println("openSpace = true; ");
-										if( getLocalName().contains("a") ) {
-											System.out.println("enterd in a team agent");
-											int pos[] = court.getPos(getLocalName());
-											System.out.println(getLocalName() + " got position and it is equals to: " + pos[0] + " " + pos[1]);
 
-											ACLMessage m = new ACLMessage( ACLMessage.INFORM );
+									if( getLocalName().contains("a") ) {
+										System.out.println("enterd in a team agent");
+										int pos[] = court.getPos(getLocalName());
+										System.out.println(getLocalName() + " got position and it is equals to: " + pos[0] + " " + pos[1]);
 
-											//random para saber qual é direção que o jogador quer mover
-											double random =  Math.random()*100;
-											System.out.println("random-number is:" + random);
-											//Mover para a frente
-											if (random <=15)
-												m.setContent(Utils.RUN + " " + (pos[0]+1) + " " + pos[1]);
-											//Mover para diagonal frente direita
-											else if (random <=30)
-												m.setContent(Utils.RUN + " " + (pos[0]+1) + " " + (pos[1]+1));
-											//Mover para diagonal frente esquerda
-											else if (random <=45)
-												m.setContent(Utils.RUN + " " + (pos[0]+1) + " " + (pos[1]-1));
-											//Mover para tras
-											else if (random <=50)
-												m.setContent(Utils.RUN + " " + (pos[0]-1) + " " + pos[1]);
-											//Mover para diagonal tras direita
-											else if (random <=60)
-												m.setContent(Utils.RUN + " " + (pos[0]-1) + " " + (pos[1]+1));
-											//Mover para diagonal tras esquerda
-											else if (random <=70)
-												m.setContent(Utils.RUN + " " + (pos[0]-1) + " " + (pos[1]-1));
-											//Mover para a direita
-											else if (random <=85)
-												m.setContent(Utils.RUN + " " + pos[0] + " " + (pos[1]+1));
-											//Mover para a esquerda
-											else
-												m.setContent(Utils.RUN + " " + pos[0] + " " + (pos[1]-1));
+										ACLMessage m = new ACLMessage( ACLMessage.INFORM );
 
-											m.addReceiver( this.agentGame );
+										//random para saber qual é direção que o jogador quer mover
+										double random =  Math.random()*100;
+										System.out.println("random-number is:" + random);
 
-											send( m );
-										} else {
-											System.out.println("entered in b team agent");
-											int[] pos = court.getPos(getLocalName());
-											System.out.println(getLocalName() + " got position and it is equals to: " + pos[0] + " " + pos[1]);
+										//Mover para a frente
+										if (random <=15 && court.openSpaceInDir(getLocalName(),"U"))
+											m.setContent(Utils.RUN + " " + (pos[0]+1) + " " + pos[1]);
 
-											ACLMessage m = new ACLMessage( ACLMessage.INFORM );
+										//Mover para diagonal frente direita
+										else if (random <=30 && court.openSpaceInDir(getLocalName(),"UR"))
+											m.setContent(Utils.RUN + " " + (pos[0]+1) + " " + (pos[1]+1));
 
-											//random para saber qual é direção que o jogador quer mover
-											double random =  Math.random()*100;
-											System.out.println("random-number is:" + random);
-											//Mover para a frente
-											if (random <=15)
-												m.setContent(Utils.RUN + " " + (pos[0]+1) + " " + pos[1]);
-												//Mover para diagonal frente direita
-											else if (random <=30)
-												m.setContent(Utils.RUN + " " + (pos[0]+1) + " " + (pos[1]+1));
-												//Mover para diagonal frente esquerda
-											else if (random <=45)
-												m.setContent(Utils.RUN + " " + (pos[0]+1) + " " + (pos[1]-1));
-												//Mover para tras
-											else if (random <=50)
-												m.setContent(Utils.RUN + " " + (pos[0]-1) + " " + pos[1]);
-												//Mover para diagonal tras direita
-											else if (random <=60)
-												m.setContent(Utils.RUN + " " + (pos[0]-1) + " " + (pos[1]+1));
-												//Mover para diagonal tras esquerda
-											else if (random <=70)
-												m.setContent(Utils.RUN + " " + (pos[0]-1) + " " + (pos[1]-1));
-												//Mover para a direita
-											else if (random <=85)
-												m.setContent(Utils.RUN + " " + pos[0] + " " + (pos[1]+1));
-												//Mover para a esquerda
-											else
-												m.setContent(Utils.RUN + " " + pos[0] + " " + (pos[1]-1));
+										//Mover para diagonal frente esquerda
+										else if (random <=45 && court.openSpaceInDir(getLocalName(),"UL"))
+											m.setContent(Utils.RUN + " " + (pos[0]+1) + " " + (pos[1]-1));
 
-											m.addReceiver( this.agentGame );
+										//Mover para tras
+										else if (random <=50 && court.openSpaceInDir(getLocalName(),"D"))
+											m.setContent(Utils.RUN + " " + (pos[0]-1) + " " + pos[1]);
 
-											send( m );
-										}
+										//Mover para diagonal tras direita
+										else if (random <=60 && court.openSpaceInDir(getLocalName(),"DR"))
+											m.setContent(Utils.RUN + " " + (pos[0]-1) + " " + (pos[1]+1));
+
+										//Mover para diagonal tras esquerda
+										else if (random <=70 && court.openSpaceInDir(getLocalName(),"DL"))
+											m.setContent(Utils.RUN + " " + (pos[0]-1) + " " + (pos[1]-1));
+
+										//Mover para a direita
+										else if (random <=85 && court.openSpaceInDir(getLocalName(),"R"))
+											m.setContent(Utils.RUN + " " + pos[0] + " " + (pos[1]+1));
+
+										//Mover para a esquerda
+										else if(court.openSpaceInDir(getLocalName(),"L"))
+											m.setContent(Utils.RUN + " " + pos[0] + " " + (pos[1]-1));
+
+										m.addReceiver( this.agentGame );
+
+										send( m );
 									}
+									else {
+										System.out.println("entered in b team agent");
+										int[] pos = court.getPos(getLocalName());
+										System.out.println(getLocalName() + " got position and it is equals to: " + pos[0] + " " + pos[1]);
+
+										ACLMessage m = new ACLMessage( ACLMessage.INFORM );
+
+										//random para saber qual é direção que o jogador quer mover
+										double random =  Math.random()*100;
+										System.out.println("random-number is:" + random);
+
+										//Mover para a frente
+										if (random <=15  && court.openSpaceInDir(getLocalName(),"U"))
+											m.setContent(Utils.RUN + " " + (pos[0]-1) + " " + pos[1]);
+
+										//Mover para diagonal frente direita
+										else if (random <=30 && court.openSpaceInDir(getLocalName(),"UR"))
+											m.setContent(Utils.RUN + " " + (pos[0]-1) + " " + (pos[1]-1));
+
+										//Mover para diagonal frente esquerda
+										else if (random <=45 && court.openSpaceInDir(getLocalName(),"UL"))
+											m.setContent(Utils.RUN + " " + (pos[0]-1) + " " + (pos[1]+1));
+
+										//Mover para tras
+										else if (random <=50 && court.openSpaceInDir(getLocalName(),"D"))
+											m.setContent(Utils.RUN + " " + (pos[0]+1) + " " + pos[1]);
+
+										//Mover para diagonal tras direita
+										else if (random <=60 && court.openSpaceInDir(getLocalName(),"DR"))
+											m.setContent(Utils.RUN + " " + (pos[0]+1) + " " + (pos[1]-1));
+
+										//Mover para diagonal tras esquerda
+										else if (random <=70 && court.openSpaceInDir(getLocalName(),"DL"))
+											m.setContent(Utils.RUN + " " + (pos[0]+1) + " " + (pos[1]+1));
+
+										//Mover para a direita
+										else if (random <=85 && court.openSpaceInDir(getLocalName(),"R"))
+											m.setContent(Utils.RUN + " " + pos[0] + " " + (pos[1]-1));
+
+										//Mover para a esquerda
+										else if(court.openSpaceInDir(getLocalName(),"L"))
+											m.setContent(Utils.RUN + " " + pos[0] + " " + (pos[1]+1));
+
+										m.addReceiver( this.agentGame );
+
+										send( m );
+									}
+
 
 
 								} catch (UnreadableException e) {

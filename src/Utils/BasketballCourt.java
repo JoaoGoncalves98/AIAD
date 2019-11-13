@@ -76,6 +76,148 @@ public class BasketballCourt implements Serializable {
         return false;
     }
 
+    public boolean openSpaceInDir( String s, String dir)
+    {
+        for(int i = 0 ; i < this.court.length ; i++)
+            for(int j = 0 ; j < this.court[0].length ; j++ )
+                if(s.toUpperCase().equals(this.court[i][j]) || s.toLowerCase().equals(this.court[i][j]))
+                {
+                    switch(dir)
+                    {
+                        case "U":
+                            if(s.toLowerCase().contains("a"))
+                            {
+                                if(confirmRange(i+1,j)) {
+                                    if (this.court[i + 1][j].toLowerCase().contains("b"))
+                                        return false;
+                                    else return true;
+                                }
+                            }
+                            else {
+                                if(confirmRange(i-1,j)) {
+                                    if (this.court[i - 1][j].toLowerCase().contains("a"))
+                                        return false;
+                                    else return true;
+                                }
+                            }
+                        case "D":
+                            if(s.toLowerCase().contains("a"))
+                            {
+                                if(confirmRange(i-1,j)) {
+                                    if (this.court[i - 1][j].toLowerCase().contains("b"))
+                                        return false;
+                                    else return true;
+                                }
+                            }
+                            else {
+                                if(confirmRange(i+1,j)) {
+                                    if (this.court[i + 1][j].toLowerCase().contains("a"))
+                                        return false;
+                                    else return true;
+                                }
+                            }
+                        case "L":
+                            if(s.toLowerCase().contains("a"))
+                            {
+                                if(confirmRange(i,j-1)) {
+                                    if (this.court[i][j - 1].toLowerCase().contains("b"))
+                                        return false;
+                                    else return true;
+                                }
+                            }
+                            else {
+                                if(confirmRange(i,j+1)) {
+                                    if (this.court[i][j + 1].toLowerCase().contains("a"))
+                                        return false;
+                                    else return true;
+                                }
+                            }
+                        case "R":
+                            if(s.toLowerCase().contains("a"))
+                            {
+                                if(confirmRange(i,j+1)) {
+                                    if (this.court[i][j + 1].toLowerCase().contains("b"))
+                                        return false;
+                                    else return true;
+                                }
+                            }
+                            else {
+                                if(confirmRange(i,j-1)) {
+                                    if(this.court[i][j-1].toLowerCase().contains("a"))
+                                        return false;
+                                    else return true;
+                                }
+                            }
+                        case "UL":
+                            if(s.toLowerCase().contains("a"))
+                            {
+                                if(confirmRange(i+1,j-1)) {
+                                    if (this.court[i + 1][j - 1].toLowerCase().contains("b"))
+                                        return false;
+                                    else return true;
+                                }
+                            }
+                            else {
+                                if(confirmRange(i-1,j+1)) {
+                                    if (this.court[i - 1][j + 1].toLowerCase().contains("a"))
+                                        return false;
+                                    else return true;
+                                }
+                            }
+                        case "UR":
+                            if(s.toLowerCase().contains("a"))
+                            {
+                                if(confirmRange(i+1,j+1)) {
+                                    if (this.court[i + 1][j + 1].toLowerCase().contains("b"))
+                                        return false;
+                                    else return true;
+                                }
+                            }
+                            else {
+                                if(confirmRange(i-1,j-1)) {
+                                    if (this.court[i - 1][j - 1].toLowerCase().contains("a"))
+                                        return false;
+                                    else return true;
+                                }
+                            }
+                        case "DL":
+                            if(s.toLowerCase().contains("a"))
+                            {
+                                if(confirmRange(i-1,j-1)) {
+                                    if (this.court[i - 1][j - 1].toLowerCase().contains("b"))
+                                        return false;
+                                    else return true;
+                                }
+                            }
+                            else {
+                                if(confirmRange(i+1,j+1)) {
+                                    if (this.court[i + 1][j + 1].toLowerCase().contains("a"))
+                                        return false;
+                                    else return true;
+                                }
+                            }
+                        case "DR":
+                            if(s.toLowerCase().contains("a"))
+                            {
+                                if(confirmRange(i-1,j+1)) {
+                                    if (this.court[i - 1][j + 1].toLowerCase().contains("b"))
+                                        return false;
+                                    else return true;
+                                }
+                            }
+                            else {
+                                if(confirmRange(i+1,j-1)) {
+                                    if (this.court[i + 1][j - 1].toLowerCase().contains("a"))
+                                        return false;
+                                    else return true;
+                                }
+                            }
+                        default: return false;
+                    }
+                }
+        return false;
+    }
+
     public boolean openSpace( String s, int lim ) {
         for(int i = 0 ; i < this.court.length ; i++)
             for(int j = 0 ; j < this.court[0].length ; j++ )
@@ -90,6 +232,7 @@ public class BasketballCourt implements Serializable {
                     } else {
                         for(int ii = -lim ; ii < lim ; ii++)
                             for(int jj = -lim ; jj < lim ; jj++ )
+                                if(confirmRange(i+ii,j+jj))
                                 if(!(ii == 0 && jj == 0))
                                     if(this.court[i+ii][j+jj].toLowerCase().contains("a"))
                                         return false;
@@ -141,10 +284,14 @@ public class BasketballCourt implements Serializable {
         return false;
     }
 
+    public boolean passingLaneOpen(String s, String p)
+    {
+        return false;
+    }
+
     public boolean makePass( String passer, String toPass, int passStat ) {
         int[] posPasser = this.getPos( passer );
         int[] posToPass = this.getPos( toPass );
-        boolean intercepter = false;
 
 
 
