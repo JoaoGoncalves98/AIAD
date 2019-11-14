@@ -1,6 +1,7 @@
 package Utils;
 
 import java.io.Serializable;
+import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class BasketballCourt implements Serializable {
@@ -293,20 +294,47 @@ public class BasketballCourt implements Serializable {
         int[] posPasser = this.getPos( passer );
         int[] posToPass = this.getPos( toPass );
         int[] diff = {((posPasser[0]-posToPass[0])/Math.abs(posPasser[0]-posToPass[0])), ((posPasser[1]-posToPass[1])/Math.abs(posPasser[1]-posToPass[1]))};
-        boolean intercepter = false;
+        int[] posIntercepter = {0,0};
+        int intercepter = 0;
         String intercepterName = "";
 
+        // See if there is a intercepter
         for(int i = posPasser[0] ; i != posToPass[0] ; i = i + diff[0])
             for(int j = posPasser[1] ; j != posToPass[1] ; j = j + diff[1])
                 if(!(this.court[i][j].contains(""+passer.toLowerCase().charAt(0)) || this.court[i][j].equals("  "))) {
-                    intercepter = true;
+                    intercepter++;
                     intercepterName = this.court[i][j];
+                    posIntercepter[0] = i;
+                    posIntercepter[1] = j;
                 }
 
-        // Now make pass!!!
+        // calculate probability
+        int prob = 20;
+        prob += (int) (passStat*20)/100;
+        if(intercepter>0) {
+            //  probability will be the distance from the center times 80;
+            int[] center = {(Math.abs(posPasser[0])+Math.abs( posToPass[0] ))/2,(Math.abs(posPasser[1])+Math.abs( posToPass[1] ))/2};
+            double dist = Math.sqrt(Math.pow(center[0]-posIntercepter[0],2)+Math.pow(center[1]-posIntercepter[1],2));
+            double maxdist = Math.sqrt(Math.pow(center[0]-posPasser[0],2)+Math.pow(center[1]-posPasser[1],2));
+            prob += (int) ((maxdist-dist)*60)/maxdist;
+        } else {
+            prob += 60;
+        }
 
+        // Now make pass
+        Random r = new Random();
+        int p = r.nextInt(100 + 1);
 
-
-        return  false;
+        if(p<=prob) {
+            // pass success
+            this.court[posPasser[0]][posPasser[1]] = this.court[posPasser[0]][posPasser[1]].toLowerCase();
+            this.court[posToPass[0]][posToPass[1]] = this.court[posToPass[0]][posToPass[1]].toUpperCase();
+            return true;
+        } else {
+            // pass failure
+            this.court[posIntercepter[0]][posIntercepter[1]] = this.court[posIntercepter[0]][posIntercepter[1]].toUpperCase();
+            this.court[posPasser[0]][posPasser[1]] = this.court[posPasser[0]][posPasser[1]].toLowerCase();
+            return false;
+        }
     }
 }
