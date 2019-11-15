@@ -355,7 +355,13 @@ public class Game extends Agent {
                                         f = false;
                                     } else if (content.contains(Utils.LAUNCH)) {
                                         // process launch
-                                        System.out.println(player.getLocalName() + " wants to launch");
+										String[] tokens = content.split(" ");
+										System.out.println(player.getLocalName() + " wants to shoot");
+										if(player.getLocalName().toLowerCase().contains(""+'a'))
+											this.father.score[0]+=this.father.court.shootBall(player.getLocalName(), Integer.parseInt(tokens[1]), Integer.parseInt(tokens[2]));
+										else
+											this.father.score[1]+=this.father.court.shootBall(player.getLocalName(), Integer.parseInt(tokens[1]), Integer.parseInt(tokens[2]));
+
                                         f = false;
                                     }
                                 } else {

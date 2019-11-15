@@ -151,15 +151,39 @@ public class Player extends Agent {
 									{
 										System.out.println("has ball");
 										ACLMessage m = new ACLMessage( ACLMessage.INFORM );
-										double random =  Math.random()*100;
+
 										// passa a bola
-										if(random <=20)
+										double random =  Math.random()*100;
+										if(getLocalName().contains("a") && (court.getPos(court.teammateName(getLocalName()))[0] > court.getPos(getLocalName())[0]))
+											random-=40;
+										else if(getLocalName().contains("b") && (court.getPos(court.teammateName(getLocalName()))[0] < court.getPos(getLocalName())[0]))
+											random-=40;
+
+										if(random <=10)
 										{
 											System.out.println(court.teammateName(getLocalName()) + " ");
-											m.setContent(Utils.PASS + " " + court.teammateName(getLocalName()) + " " + stats.getpassPercentage()); //Ainda nao tem passing stat
+											m.setContent(Utils.PASS + " " + court.teammateName(getLocalName()) + " " + stats.getpassPercentage());
 											m.addReceiver( this.agentGame );
 
 											send( m );
+										}
+										else
+										{
+											//lança a bola
+											double dist=court.distToBasket(getLocalName());
+											double prob = 10;
+											prob += (1-(dist/(Math.sqrt(Math.pow(20,2) + Math.pow(5,2)))))*50; //Pode aumentar a prob de lançar ate +50%
+											if(court.openSpace(getLocalName(),2)) prob += 20;
+											else if(court.openSpace(getLocalName(),1)) prob += 10;
+
+											random =  Math.random()*100;
+											if(random <= prob)
+											{
+												m.setContent(Utils.LAUNCH + " " + stats.getInsideScorePercentage() + " " + stats.getOutsideScorePercentage());
+												m.addReceiver( this.agentGame );
+
+												send( m );
+											}
 										}
 									}
 

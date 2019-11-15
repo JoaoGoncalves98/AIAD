@@ -351,11 +351,11 @@ public class BasketballCourt implements Serializable {
             }
             else //mau passe por isso as posições vao reiniciar e a bola vai passar para um jogador da outra equipa random
             {
-                System.out.println("Bad pass. Ball goes to the other team");
+                System.out.println("Bad pass. Play will restart with the other team having posession");
                 updatePos("a1", 0, 3);
                 updatePos("a2", 0, 6);
-                updatePos("b1", 19, 3);
-                updatePos("b2", 19, 6);
+                updatePos("b2", 19, 3);
+                updatePos("b1", 19, 6);
 
                 if (!passer.toLowerCase().contains("a"))
                 {
@@ -377,5 +377,81 @@ public class BasketballCourt implements Serializable {
 
             return false;
         }
+    }
+
+    public double distToBasket(String player)
+    {
+        int team=1;
+        if (player.charAt(0)=='b')
+            team=2;
+        int[] posShotter = getPos(player);
+        double getNetDist;
+        if(team==1) //Aqui o cesto vai tar na posição x=20, y=5
+            getNetDist = Math.sqrt(Math.pow(Math.abs(20-posShotter[0]),2) + Math.pow(Math.abs(5-posShotter[1]),2));
+        else //Aqui o cesto vai tar na posição x=-1, y=5
+            getNetDist = Math.sqrt(Math.pow(Math.abs(-1-posShotter[0]),2) + Math.pow(Math.abs(5-posShotter[1]),2));
+        return getNetDist;
+    }
+
+    public int shootBall( String player, int insideScore, int outsideScore )
+    {
+        int points=0;
+        double dist = distToBasket(player);
+        int prob = 0;
+        int[] posPlayer = getPos(player);
+        if(openSpace(player,2)) prob+=20;
+        else if(openSpace(player,1)) prob +=10;
+
+        if(dist<4)
+        {
+            prob+= ((insideScore*30)/100)+20;
+        }
+        else if(dist<6)
+        {
+            prob+= (outsideScore*30)/100;
+        }
+
+        if((Math.random()*100)<prob && dist<4)
+        {
+            System.out.println(player + " scored a 2-pointer!");
+            points=2;
+        }
+        else if((Math.random()*100)<prob && dist<6)
+        {
+            System.out.println(player + " scored a 3-pointer!");
+            points=3;
+        }
+        else if((Math.random()*100)<prob && dist>=6)
+        {
+            System.out.println(player + " scored a deep 3-pointer!");
+            points=3;
+        }
+        else
+        {
+            System.out.println(player + " missed the shot!");
+        }
+
+        this.court[posPlayer[0]][posPlayer[1]]=this.court[posPlayer[0]][posPlayer[1]].toLowerCase();
+        updatePos("a1", 0, 3);
+        updatePos("a2", 0, 6);
+        updatePos("b2", 19, 3);
+        updatePos("b1", 19, 6);
+        if (!player.toLowerCase().contains("a"))
+        {
+            if(Math.random()<0.5)
+                this.court[0][3]=this.court[0][3].toUpperCase();
+            else
+                this.court[0][6]=this.court[0][6].toUpperCase();
+
+        }
+        else {
+            if (Math.random() < 0.5)
+                this.court[19][3] = this.court[19][3].toUpperCase();
+            else
+                this.court[19][6] = this.court[19][6].toUpperCase();
+        }
+
+        System.out.println("Other team has posession now!");
+        return points;
     }
 }
