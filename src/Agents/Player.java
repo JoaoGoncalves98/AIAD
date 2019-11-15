@@ -15,7 +15,7 @@ public class Player extends Agent {
 	private Position position= new Position(0,0);
     private boolean hasBall=false;
     private int team = 0;
-    private Stats stats = null;
+    private Stats stats = new Stats();
 
 	protected void setup()
     {
@@ -152,13 +152,14 @@ public class Player extends Agent {
 										System.out.println("has ball");
 										ACLMessage m = new ACLMessage( ACLMessage.INFORM );
 										double random =  Math.random()*100;
-										if(random <=20) {
+										// passa a bola
+										if(random <=20)
+										{
 											System.out.println(court.teammateName(getLocalName()) + " ");
-											m.setContent(Utils.PASS + " " + court.teammateName(getLocalName()) + " " + 50); //Ainda nao tem passing stat
+											m.setContent(Utils.PASS + " " + court.teammateName(getLocalName()) + " " + stats.getpassPercentage()); //Ainda nao tem passing stat
 											m.addReceiver( this.agentGame );
 
 											send( m );
-											//PODE PASSAR E LANÇAR
 										}
 									}
 
@@ -178,31 +179,31 @@ public class Player extends Agent {
 										System.out.println("random-number is:" + random);
 
 										//Mover para a frente
-										if (random <=15 && court.openSpaceInDir(getLocalName(),"U"))
+										if (random <=25 && court.openSpaceInDir(getLocalName(),"U"))
 											m.setContent(Utils.RUN + " " + (pos[0]+1) + " " + pos[1]);
 
 										//Mover para diagonal frente direita
-										else if (random <=30 && court.openSpaceInDir(getLocalName(),"UR"))
+										else if (random <=45 && court.openSpaceInDir(getLocalName(),"UR"))
 											m.setContent(Utils.RUN + " " + (pos[0]+1) + " " + (pos[1]+1));
 
 										//Mover para diagonal frente esquerda
-										else if (random <=45 && court.openSpaceInDir(getLocalName(),"UL"))
+										else if (random <=65 && court.openSpaceInDir(getLocalName(),"UL"))
 											m.setContent(Utils.RUN + " " + (pos[0]+1) + " " + (pos[1]-1));
 
 										//Mover para tras
-										else if (random <=50 && court.openSpaceInDir(getLocalName(),"D"))
+										else if (random <=70 && court.openSpaceInDir(getLocalName(),"D"))
 											m.setContent(Utils.RUN + " " + (pos[0]-1) + " " + pos[1]);
 
 										//Mover para diagonal tras direita
-										else if (random <=60 && court.openSpaceInDir(getLocalName(),"DR"))
+										else if (random <=75 && court.openSpaceInDir(getLocalName(),"DR"))
 											m.setContent(Utils.RUN + " " + (pos[0]-1) + " " + (pos[1]+1));
 
 										//Mover para diagonal tras esquerda
-										else if (random <=70 && court.openSpaceInDir(getLocalName(),"DL"))
+										else if (random <=80 && court.openSpaceInDir(getLocalName(),"DL"))
 											m.setContent(Utils.RUN + " " + (pos[0]-1) + " " + (pos[1]-1));
 
 										//Mover para a direita
-										else if (random <=85 && court.openSpaceInDir(getLocalName(),"R"))
+										else if (random <=90 && court.openSpaceInDir(getLocalName(),"R"))
 											m.setContent(Utils.RUN + " " + pos[0] + " " + (pos[1]+1));
 
 										//Mover para a esquerda
@@ -225,31 +226,31 @@ public class Player extends Agent {
 										System.out.println("random-number is:" + random);
 
 										//Mover para a frente
-										if (random <=15  && court.openSpaceInDir(getLocalName(),"U"))
+										if (random <=25  && court.openSpaceInDir(getLocalName(),"U"))
 											m.setContent(Utils.RUN + " " + (pos[0]-1) + " " + pos[1]);
 
 										//Mover para diagonal frente direita
-										else if (random <=30 && court.openSpaceInDir(getLocalName(),"UR"))
+										else if (random <=45 && court.openSpaceInDir(getLocalName(),"UR"))
 											m.setContent(Utils.RUN + " " + (pos[0]-1) + " " + (pos[1]-1));
 
 										//Mover para diagonal frente esquerda
-										else if (random <=45 && court.openSpaceInDir(getLocalName(),"UL"))
+										else if (random <=65 && court.openSpaceInDir(getLocalName(),"UL"))
 											m.setContent(Utils.RUN + " " + (pos[0]-1) + " " + (pos[1]+1));
 
 										//Mover para tras
-										else if (random <=50 && court.openSpaceInDir(getLocalName(),"D"))
+										else if (random <=70 && court.openSpaceInDir(getLocalName(),"D"))
 											m.setContent(Utils.RUN + " " + (pos[0]+1) + " " + pos[1]);
 
 										//Mover para diagonal tras direita
-										else if (random <=60 && court.openSpaceInDir(getLocalName(),"DR"))
+										else if (random <=75 && court.openSpaceInDir(getLocalName(),"DR"))
 											m.setContent(Utils.RUN + " " + (pos[0]+1) + " " + (pos[1]-1));
 
 										//Mover para diagonal tras esquerda
-										else if (random <=70 && court.openSpaceInDir(getLocalName(),"DL"))
+										else if (random <=80 && court.openSpaceInDir(getLocalName(),"DL"))
 											m.setContent(Utils.RUN + " " + (pos[0]+1) + " " + (pos[1]+1));
 
 										//Mover para a direita
-										else if (random <=85 && court.openSpaceInDir(getLocalName(),"R"))
+										else if (random <=90 && court.openSpaceInDir(getLocalName(),"R"))
 											m.setContent(Utils.RUN + " " + pos[0] + " " + (pos[1]-1));
 
 										//Mover para a esquerda

@@ -277,16 +277,13 @@ public class BasketballCourt implements Serializable {
 
     public boolean updatePos( String s, int ii, int jj) {
         if(this.confirmRange(ii, jj) && this.court[ii][jj].equals("  ")) {
-            System.out.println("Entrou1");
             for(int i = 0 ; i < this.court.length ; i++)
                 for(int j = 0 ; j < this.court[0].length ; j++ )
                     if(this.court[i][j].equals(s.toUpperCase())) {
-                        System.out.println("Entrou2");
                         this.court[i][j] = "  ";
                         this.court[ii][jj] = s.toUpperCase();
                         return true;
                     } else if(this.court[i][j].equals(s)) {
-                        System.out.println("Entrou2");
                         this.court[i][j] = "  ";
                         this.court[ii][jj] = s;
                         return true;

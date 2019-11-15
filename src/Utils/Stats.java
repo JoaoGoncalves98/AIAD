@@ -16,6 +16,10 @@ public class Stats {
 	    interceptPercentage = intercept; 
 	}
 */
+	public Stats()
+	{
+	}
+
     public Stats(int i) {
     	switch(i) {
     	case 0: // Inside Scorer
