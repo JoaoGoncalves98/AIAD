@@ -150,7 +150,16 @@ public class Player extends Agent {
 									if(court.hasBall(getLocalName()))
 									{
 										System.out.println("has ball");
-										//PODE PASSAR E LANÇAR
+										ACLMessage m = new ACLMessage( ACLMessage.INFORM );
+										double random =  Math.random()*100;
+										if(random <=20) {
+											System.out.println(court.teammateName(getLocalName()) + " ");
+											m.setContent(Utils.PASS + " " + court.teammateName(getLocalName()) + " " + 50); //Ainda nao tem passing stat
+											m.addReceiver( this.agentGame );
+
+											send( m );
+											//PODE PASSAR E LANÇAR
+										}
 									}
 
 									else

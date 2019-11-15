@@ -77,6 +77,16 @@ public class BasketballCourt implements Serializable {
         return false;
     }
 
+    public String teammateName ( String s) {
+        for (int i = 0; i < this.court.length; i++) {
+            for (int j = 0; j < this.court[0].length; j++)
+                if (!s.toLowerCase().equals(this.court[i][j].toLowerCase()) && this.court[i][j].toLowerCase().contains("" + s.toLowerCase().charAt(0)))
+                    return this.court[i][j];
+        }
+        return "";
+
+    }
+
     public boolean openSpaceInDir( String s, String dir)
     {
         for(int i = 0 ; i < this.court.length ; i++)
@@ -285,23 +295,28 @@ public class BasketballCourt implements Serializable {
         return false;
     }
 
-    public boolean passingLaneOpen(String s, String p)
-    {
-        return false;
-    }
-
     public boolean makePass( String passer, String toPass, int passStat ) {
         int[] posPasser = this.getPos( passer );
         int[] posToPass = this.getPos( toPass );
-        int[] diff = {((posPasser[0]-posToPass[0])/Math.abs(posPasser[0]-posToPass[0])), ((posPasser[1]-posToPass[1])/Math.abs(posPasser[1]-posToPass[1]))};
+        int[] diff= new int[2];
+        if(posPasser[0]<posToPass[0])
+            diff[0]=1;
+        else
+            diff[0]=-1;
+        if(posPasser[1]<posToPass[1])
+            diff[1]=1;
+        else
+            diff[1]=-1;
+
         int[] posIntercepter = {0,0};
         int intercepter = 0;
         String intercepterName = "";
 
         // See if there is a intercepter
-        for(int i = posPasser[0] ; i != posToPass[0] ; i = i + diff[0])
+        for(int i = posPasser[0] ; i != posToPass[0]+diff[0] ; i = i + diff[0])
             for(int j = posPasser[1] ; j != posToPass[1] ; j = j + diff[1])
-                if(!(this.court[i][j].contains(""+passer.toLowerCase().charAt(0)) || this.court[i][j].equals("  "))) {
+                if(!(this.court[i][j].toLowerCase().contains(""+passer.toLowerCase().charAt(0)) || (this.court[i][j].contains(" ")))) {
+                    System.out.println("->Intercetor igual a: " + this.court[i][j] + " passer.1ª letra: " +passer.toLowerCase().charAt(0) + "na posição" + i + " " + j);
                     intercepter++;
                     intercepterName = this.court[i][j];
                     posIntercepter[0] = i;
@@ -310,7 +325,7 @@ public class BasketballCourt implements Serializable {
 
         // calculate probability
         int prob = 20;
-        prob += (int) (passStat*20)/100;
+        prob += (int) (passStat*30)/100;
         if(intercepter>0) {
             //  probability will be the distance from the center times 80;
             int[] center = {(Math.abs(posPasser[0])+Math.abs( posToPass[0] ))/2,(Math.abs(posPasser[1])+Math.abs( posToPass[1] ))/2};
@@ -318,7 +333,7 @@ public class BasketballCourt implements Serializable {
             double maxdist = Math.sqrt(Math.pow(center[0]-posPasser[0],2)+Math.pow(center[1]-posPasser[1],2));
             prob += (int) ((maxdist-dist)*60)/maxdist;
         } else {
-            prob += 60;
+            prob += 50;
         }
 
         // Now make pass
@@ -331,9 +346,38 @@ public class BasketballCourt implements Serializable {
             this.court[posToPass[0]][posToPass[1]] = this.court[posToPass[0]][posToPass[1]].toUpperCase();
             return true;
         } else {
-            // pass failure
-            this.court[posIntercepter[0]][posIntercepter[1]] = this.court[posIntercepter[0]][posIntercepter[1]].toUpperCase();
             this.court[posPasser[0]][posPasser[1]] = this.court[posPasser[0]][posPasser[1]].toLowerCase();
+            // pass failure
+            if(intercepter>0) {
+                System.out.println("Pass intercepted");
+                this.court[posIntercepter[0]][posIntercepter[1]] = this.court[posIntercepter[0]][posIntercepter[1]].toUpperCase();
+            }
+            else //mau passe por isso as posições vao reiniciar e a bola vai passar para um jogador da outra equipa random
+            {
+                System.out.println("Bad pass. Ball goes to the other team");
+                updatePos("a1", 0, 3);
+                updatePos("a2", 0, 6);
+                updatePos("b1", 19, 3);
+                updatePos("b2", 19, 6);
+
+                if (!passer.toLowerCase().contains("a"))
+                {
+                    if(Math.random()<0.5)
+                        this.court[0][3]=this.court[0][3].toUpperCase();
+                    else
+                        this.court[0][6]=this.court[0][6].toUpperCase();
+
+                }
+                else {
+                    if (Math.random() < 0.5)
+                        this.court[19][3] = this.court[19][3].toUpperCase();
+                    else
+                        this.court[19][6] = this.court[19][6].toUpperCase();
+                }
+            }
+
+
+
             return false;
         }
     }

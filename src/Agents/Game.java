@@ -344,7 +344,7 @@ public class Game extends Agent {
 										String[] tokens = content.split(" ");
 
 										System.out.println(player.getLocalName() + " wants to pass");
-										System.out.println(player.getLocalName() + " WANTS TO PASS TO:" + Integer.parseInt(tokens[1]) + " WITH PASS STAT OF: " + Integer.parseInt(tokens[2]));
+										System.out.println(player.getLocalName() + " WANTS TO PASS TO:" + tokens[1] + " WITH PASS STAT OF: " + Integer.parseInt(tokens[2]));
 
 
 										if(this.father.court.makePass(player.getLocalName(), tokens[1], Integer.parseInt(tokens[2])))
