@@ -12,8 +12,8 @@ public class Referee extends Agent {
 
 	private AID agentGame = null;
 
-	//private int timer = 60*4;
-	private int timer = 30;
+	private int timer = 60*4;
+	//private int timer = 30;
 
 	protected void setup()
     {

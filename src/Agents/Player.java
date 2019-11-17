@@ -13,7 +13,6 @@ public class Player extends Agent {
 	private Utils utils = new Utils( this );
 
 	private Position position= new Position(0,0);
-    private boolean hasBall=false;
     private int team = 0;
     private Stats stats = new Stats();
 
@@ -147,7 +146,7 @@ public class Player extends Agent {
 									System.out.println("MSG that should be court content: " + msg2.getContentObject());
 									BasketballCourt court = (BasketballCourt) msg2.getContentObject();
 
-									if(court.hasBall(getLocalName()) && !court.openSpace(getLocalName(), 3))
+									if(court.hasBall(getLocalName()) && (!court.openSpace(getLocalName(), 3) || court.closeBasktet(getLocalName()) ))
 									{
 										System.out.println("has ball");
 										ACLMessage m = new ACLMessage( ACLMessage.INFORM );
@@ -202,31 +201,31 @@ public class Player extends Agent {
 										System.out.println("random-number is:" + random);
 
 										//Mover para a frente
-										if (random <=25 && court.openSpaceInDir(getLocalName(),"U"))
+										if (random <=28 && court.openSpaceInDir(getLocalName(),"U"))
 											m.setContent(Utils.RUN + " " + (pos[0]+1) + " " + pos[1]);
 
 										//Mover para diagonal frente direita
-										else if (random <=45 && court.openSpaceInDir(getLocalName(),"UR"))
+										else if (random <=56 && court.openSpaceInDir(getLocalName(),"UR"))
 											m.setContent(Utils.RUN + " " + (pos[0]+1) + " " + (pos[1]+1));
 
 										//Mover para diagonal frente esquerda
-										else if (random <=65 && court.openSpaceInDir(getLocalName(),"UL"))
+										else if (random <=84 && court.openSpaceInDir(getLocalName(),"UL"))
 											m.setContent(Utils.RUN + " " + (pos[0]+1) + " " + (pos[1]-1));
 
 										//Mover para tras
-										else if (random <=70 && court.openSpaceInDir(getLocalName(),"D"))
+										else if (random <=86 && court.openSpaceInDir(getLocalName(),"D"))
 											m.setContent(Utils.RUN + " " + (pos[0]-1) + " " + pos[1]);
 
 										//Mover para diagonal tras direita
-										else if (random <=75 && court.openSpaceInDir(getLocalName(),"DR"))
+										else if (random <=88 && court.openSpaceInDir(getLocalName(),"DR"))
 											m.setContent(Utils.RUN + " " + (pos[0]-1) + " " + (pos[1]+1));
 
 										//Mover para diagonal tras esquerda
-										else if (random <=80 && court.openSpaceInDir(getLocalName(),"DL"))
+										else if (random <=90 && court.openSpaceInDir(getLocalName(),"DL"))
 											m.setContent(Utils.RUN + " " + (pos[0]-1) + " " + (pos[1]-1));
 
 										//Mover para a direita
-										else if (random <=90 && court.openSpaceInDir(getLocalName(),"R"))
+										else if (random <=95 && court.openSpaceInDir(getLocalName(),"R"))
 											m.setContent(Utils.RUN + " " + pos[0] + " " + (pos[1]+1));
 
 										//Mover para a esquerda
@@ -249,31 +248,31 @@ public class Player extends Agent {
 										System.out.println("random-number is:" + random);
 
 										//Mover para a frente
-										if (random <=25  && court.openSpaceInDir(getLocalName(),"U"))
+										if (random <=28  && court.openSpaceInDir(getLocalName(),"U"))
 											m.setContent(Utils.RUN + " " + (pos[0]-1) + " " + pos[1]);
 
 										//Mover para diagonal frente direita
-										else if (random <=45 && court.openSpaceInDir(getLocalName(),"UR"))
+										else if (random <=56 && court.openSpaceInDir(getLocalName(),"UR"))
 											m.setContent(Utils.RUN + " " + (pos[0]-1) + " " + (pos[1]-1));
 
 										//Mover para diagonal frente esquerda
-										else if (random <=65 && court.openSpaceInDir(getLocalName(),"UL"))
+										else if (random <=84 && court.openSpaceInDir(getLocalName(),"UL"))
 											m.setContent(Utils.RUN + " " + (pos[0]-1) + " " + (pos[1]+1));
 
 										//Mover para tras
-										else if (random <=70 && court.openSpaceInDir(getLocalName(),"D"))
+										else if (random <=86 && court.openSpaceInDir(getLocalName(),"D"))
 											m.setContent(Utils.RUN + " " + (pos[0]+1) + " " + pos[1]);
 
 										//Mover para diagonal tras direita
-										else if (random <=75 && court.openSpaceInDir(getLocalName(),"DR"))
+										else if (random <=88 && court.openSpaceInDir(getLocalName(),"DR"))
 											m.setContent(Utils.RUN + " " + (pos[0]+1) + " " + (pos[1]-1));
 
 										//Mover para diagonal tras esquerda
-										else if (random <=80 && court.openSpaceInDir(getLocalName(),"DL"))
+										else if (random <=90 && court.openSpaceInDir(getLocalName(),"DL"))
 											m.setContent(Utils.RUN + " " + (pos[0]+1) + " " + (pos[1]+1));
 
 										//Mover para a direita
-										else if (random <=90 && court.openSpaceInDir(getLocalName(),"R"))
+										else if (random <=95 && court.openSpaceInDir(getLocalName(),"R"))
 											m.setContent(Utils.RUN + " " + pos[0] + " " + (pos[1]-1));
 
 										//Mover para a esquerda
@@ -322,14 +321,6 @@ public class Player extends Agent {
 
 	public void setPosition(Position position) {
 		this.position = position;
-	}
-
-	public boolean hasBall() {
-		return hasBall;
-	}
-
-	public void setHasBall(boolean hasBall) {
-		this.hasBall = hasBall;
 	}
 
 	public int basketRange(){

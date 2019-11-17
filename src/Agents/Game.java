@@ -17,7 +17,7 @@ public class Game extends Agent {
 	private Team team1 = new Team(this.nPlayers/2, "A");
 	private Team team2 = new Team(this.nPlayers/2, "B");
 	private AID referee = null;
-	private BasketballCourt court = new BasketballCourt(4, 'A', 'B', 20, 10);
+	private BasketballCourt court = new BasketballCourt(4, 'A', 'B', 8, 6);
 
 	private int[] score = new int[2]; // Pontuação
 	
@@ -324,6 +324,7 @@ public class Game extends Agent {
                                 this.endgame(msg);
                                 if (player.getLocalName().equals(team.players.get(i / 2).getLocalName())) {
                                     String content = (String) msg.getContent();
+                                    System.out.println("MESSAGE IN GAME HAS: " + content);
                                     if (content.contains(Utils.RUN)) {
                                         // process run
 										String[] tokens = content.split(" ");

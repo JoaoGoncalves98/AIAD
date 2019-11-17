@@ -36,7 +36,40 @@ public class BasketballCourt implements Serializable {
         for (int i = this.court.length-1 ; i >= 0 && inc > 0 ; i--)
             for (int j = 0 ; j < this.court[0].length-1 && inc > 0 ; j++)
                 if( (i == this.court.length-1 && (j == this.court[0].length / 3 || j == this.court[0].length *2 / 3)) ||
-                    (i == this.court.length-3 && (j == this.court[0].length / 4 || j == this.court[0].length *2 / 4 || j == this.court[0].length *3 / 4))) {
+                        (i == this.court.length-3 && (j == this.court[0].length / 4 || j == this.court[0].length *2 / 4 || j == this.court[0].length *3 / 4))) {
+                    if(this.nPlayers/2 + inc == randomNum)
+                        this.court[i][j] = this.team2C + Integer.toString(inc);
+                    else
+                        this.court[i][j] = Character.toLowerCase(this.team2C) + Integer.toString(inc);
+                    inc--;
+                }
+    }
+
+    public void restartPos(String possession) {
+        int randomNum = 0;
+        if(possession.toLowerCase().contains("a"))
+            randomNum = ThreadLocalRandom.current().nextInt(1, this.nPlayers/2 + 1);
+        else
+            randomNum = ThreadLocalRandom.current().nextInt(this.nPlayers/2, this.nPlayers + 1);
+
+        for (int i = 0 ; i < this.court.length ; i++)
+            for (int j = 0 ; j < this.court[0].length ; j++)
+                this.court[i][j] = "  ";
+        int inc = 0;
+        for (int i = 0 ; i < this.court.length-1 && inc < this.nPlayers/2 ; i++)
+            for (int j = 0 ; j < this.court[0].length-1 && inc < this.nPlayers/2 ; j++)
+                if( (i == 0 && (j == this.court[0].length / 3 || j == this.court[0].length *2 / 3)) ||
+                        (i == 2 && (j == this.court[0].length / 4 || j == this.court[0].length *2 / 4 || j == this.court[0].length *3 / 4))) {
+                    inc++;
+                    if(inc == randomNum)
+                        this.court[i][j] = this.team1C + Integer.toString(inc);
+                    else
+                        this.court[i][j] = Character.toLowerCase(this.team1C) + Integer.toString(inc);
+                }
+        for (int i = this.court.length-1 ; i >= 0 && inc > 0 ; i--)
+            for (int j = 0 ; j < this.court[0].length-1 && inc > 0 ; j++)
+                if( (i == this.court.length-1 && (j == this.court[0].length / 3 || j == this.court[0].length *2 / 3)) ||
+                        (i == this.court.length-3 && (j == this.court[0].length / 4 || j == this.court[0].length *2 / 4 || j == this.court[0].length *3 / 4))) {
                     if(this.nPlayers/2 + inc == randomNum)
                         this.court[i][j] = this.team2C + Integer.toString(inc);
                     else
@@ -55,14 +88,14 @@ public class BasketballCourt implements Serializable {
 
         System.out.println("  ");
         for (int j = 0 ; j < this.court[0].length ; j++) {
-            if(j == 5)
+            if(j == this.court[0].length/2)
                 System.out.print(j + " O  ");
             else
                 System.out.print(j + " |  ");
             for (int i = 0 ; i < this.court.length ; i++) {
                 System.out.print(this.court[i][j] + "  ");
             }
-            if(j == 5)
+            if(j == this.court[0].length/2)
                 System.out.println(j + "O");
             else
                 System.out.println(j + "|");
@@ -264,6 +297,19 @@ public class BasketballCourt implements Serializable {
         return a;
     }
 
+    public boolean closeBasktet( String s ) {
+        int[] pos = this.getPos(s);
+        double dist = 0;
+        if(s.toLowerCase().contains("a"))
+            dist = Math.sqrt(Math.pow(pos[0]-this.court.length,2)+Math.pow(pos[1]-this.court[0].length/2,2));
+        else
+            dist = Math.sqrt(Math.pow(pos[0]-0,2)+Math.pow(pos[1]-this.court[0].length/2,2));
+
+        if(dist < 3)
+            return true;
+        return false;
+    }
+
     public String[][] getCourt() {
         return  this.court;
     }
@@ -351,29 +397,11 @@ public class BasketballCourt implements Serializable {
             else //mau passe por isso as posições vao reiniciar e a bola vai passar para um jogador da outra equipa random
             {
                 System.out.println("Bad pass. Play will restart with the other team having posession");
-                updatePos("a1", 0, 3);
-                updatePos("a2", 0, 6);
-                updatePos("b2", 19, 3);
-                updatePos("b1", 19, 6);
-
-                if (!passer.toLowerCase().contains("a"))
-                {
-                    if(Math.random()<0.5)
-                        this.court[0][3]=this.court[0][3].toUpperCase();
-                    else
-                        this.court[0][6]=this.court[0][6].toUpperCase();
-
-                }
-                else {
-                    if (Math.random() < 0.5)
-                        this.court[19][3] = this.court[19][3].toUpperCase();
-                    else
-                        this.court[19][6] = this.court[19][6].toUpperCase();
-                }
+                if (passer.toLowerCase().contains("a"))
+                    this.restartPos("b");
+                else
+                    this.restartPos("a");
             }
-
-
-
             return false;
         }
     }
@@ -430,25 +458,10 @@ public class BasketballCourt implements Serializable {
             System.out.println(player + " missed the shot!");
         }
 
-        this.court[posPlayer[0]][posPlayer[1]]=this.court[posPlayer[0]][posPlayer[1]].toLowerCase();
-        updatePos("a1", 0, 3);
-        updatePos("a2", 0, 6);
-        updatePos("b2", 19, 3);
-        updatePos("b1", 19, 6);
-        if (!player.toLowerCase().contains("a"))
-        {
-            if(Math.random()<0.5)
-                this.court[0][3]=this.court[0][3].toUpperCase();
-            else
-                this.court[0][6]=this.court[0][6].toUpperCase();
-
-        }
-        else {
-            if (Math.random() < 0.5)
-                this.court[19][3] = this.court[19][3].toUpperCase();
-            else
-                this.court[19][6] = this.court[19][6].toUpperCase();
-        }
+        if (player.toLowerCase().contains("a"))
+            this.restartPos("b");
+        else
+            this.restartPos("a");
 
         System.out.println("Other team has posession now!");
         return points;
