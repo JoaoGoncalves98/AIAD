@@ -248,7 +248,6 @@ public class BasketballCourt implements Serializable {
                                     if(this.court[i+ii][j+jj].toLowerCase().contains("a"))
                                         return false;
                     }
-                    return true;
                 }
         return true;
     }

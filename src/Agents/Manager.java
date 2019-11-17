@@ -107,7 +107,7 @@ public class Manager extends Agent {
             // Check if Game started
             while(this.agentGame == null) {
 
-                System.out.println("game started?");
+                System.out.println("game started? -- MAN");
 
                 this.agentGame = this.father.utils.getService("gamestarted");
 
@@ -126,33 +126,36 @@ public class Manager extends Agent {
                 if(msg != null)
                 {
                     if (Utils.SCORE.equals(msg.getContent())) {
-                        ACLMessage msg2 = receive();
-                        if (msg2 != null)
-                        {
-                            try
+                        boolean f = true;
+                        while (f) {
+                            ACLMessage msg2 = receive();
+                            if (msg2 != null)
                             {
-                                System.out.println("MANAGER OF TEAM " + "" + " GOT MESSAGE");
-                                int[] score = (int[]) msg2.getContentObject();
-                                System.out.println("SCORE: A:" + score[0] + " B:" + score[1]);
+                                try
+                                {
+                                    System.out.println("MANAGER OF TEAM " + "" + " GOT MESSAGE");
+                                    int[] score = (int[]) msg2.getContentObject();
+                                    System.out.println("SCORE: A:" + score[0] + " B:" + score[1]);
 
-                                //TODO
-                                // Medidante a pontuação da sua equipa ele decide qual a tática a usar
+                                    //TODO
+                                    // Medidante a pontuação da sua equipa ele decide qual a tática a usar
 
-                                ACLMessage m1 = new ACLMessage( ACLMessage.INFORM );
-                                m1.setContent( Utils.ACK );
-                                m1.addReceiver(this.agentGame);
-                                send(m1);
+                                    ACLMessage m1 = new ACLMessage( ACLMessage.INFORM );
+                                    m1.setContent( Utils.ACK );
+                                    m1.addReceiver(this.agentGame);
+                                    send(m1);
+                                    f = false;
+                                }
+                                catch (Exception e)
+                                {
+                                    e.printStackTrace();
+                                }
                             }
-                            catch (Exception e)
-                            {
-                                e.printStackTrace();
-                            }
-
                         }
                     }
                 }
             }
-            // this.finished = true;
+            this.finished = true;
         }
 
         private boolean finished = false;

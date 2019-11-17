@@ -231,15 +231,11 @@ public class Game extends Agent {
 
 				// Broadcast !!!
 				while(this.gameGoing) {
-				    // VE SAE JOGO JA ACABOU
+				    // VE SE JOGO JA ACABOU
+					System.out.println("GAME STILL GOIN!G");
                     ACLMessage msg0 = receive();
                     if (msg0 != null) {
-                        //AID sender = msg.getSender();
-                        //System.out.println(sender);
-                        if (Utils.ENDEDGAME.equals( msg0.getContent() )) {
-                            this.gameGoing = !this.gameGoing;
-                            this.father.utils.takeDown(); // Deletes DF entry
-                        }
+                        this.endgame(msg0);
                     } else {
                         // if no message is arrived, block the behaviour
                         block();
@@ -278,6 +274,7 @@ public class Game extends Agent {
 							ACLMessage msg = receive();
 							if(msg != null)
 							{
+                                this.endgame(msg);
 								if(Utils.ACK.equals(msg.getContent()))
 								{
 									System.out.println("CONTINUE WITH THE GAME");
@@ -324,6 +321,7 @@ public class Game extends Agent {
 								System.out.println("AND I/2 IS = " + i/2);
 								System.out.println("AID sent to is = " + team.players.get(i/2));
 								System.out.println("AID received from is = " + player);
+                                this.endgame(msg);
                                 if (player.getLocalName().equals(team.players.get(i / 2).getLocalName())) {
                                     String content = (String) msg.getContent();
                                     if (content.contains(Utils.RUN)) {
@@ -378,8 +376,15 @@ public class Game extends Agent {
 				this.finished = true;
 			}
 
+			public void endgame( ACLMessage msg0 ) {
+                if (Utils.ENDEDGAME.equals( msg0.getContent() )) {
+                    this.gameGoing = !this.gameGoing;
+                    this.father.utils.takeDown(); // Deletes DF entry
+                }
+            }
 
-			private boolean finished = false;
+
+        private boolean finished = false;
 		public  boolean done() {  return finished;  }
 	}
 }

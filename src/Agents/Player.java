@@ -128,7 +128,7 @@ public class Player extends Agent {
 			while(this.agentGame == null) {
 				// ESPERANDO Q O JOGO COMECE
 				this.agentGame = this.father.utils.getService("gamestarted");
-				System.out.println("game started?");
+				System.out.println("game started? -- PLAYER");
 				try { Thread.sleep(1000);} catch (InterruptedException e) { e.printStackTrace(); }
 			}
 
@@ -147,7 +147,7 @@ public class Player extends Agent {
 									System.out.println("MSG that should be court content: " + msg2.getContentObject());
 									BasketballCourt court = (BasketballCourt) msg2.getContentObject();
 
-									if(court.hasBall(getLocalName()))
+									if(court.hasBall(getLocalName()) && !court.openSpace(getLocalName(), 3))
 									{
 										System.out.println("has ball");
 										ACLMessage m = new ACLMessage( ACLMessage.INFORM );
@@ -186,14 +186,13 @@ public class Player extends Agent {
 											}
 										}
 									}
-
 									else
 										System.out.println("hasn't ball");
 
 
 									if( getLocalName().contains("a") ) {
 										System.out.println("enterd in a team agent");
-										int pos[] = court.getPos(getLocalName());
+										int[] pos = court.getPos(getLocalName());
 										System.out.println(getLocalName() + " got position and it is equals to: " + pos[0] + " " + pos[1]);
 
 										ACLMessage m = new ACLMessage( ACLMessage.INFORM );
