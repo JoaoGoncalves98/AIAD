@@ -413,10 +413,10 @@ public class BasketballCourt implements Serializable {
             team=2;
         int[] posShotter = getPos(player);
         double getNetDist;
-        if(team==1) //Aqui o cesto vai tar na posição x=20, y=5
-            getNetDist = Math.sqrt(Math.pow(Math.abs(20-posShotter[0]),2) + Math.pow(Math.abs(5-posShotter[1]),2));
-        else //Aqui o cesto vai tar na posição x=-1, y=5
-            getNetDist = Math.sqrt(Math.pow(Math.abs(-1-posShotter[0]),2) + Math.pow(Math.abs(5-posShotter[1]),2));
+        if(team==1) //Aqui o cesto vai tar na posição x=this.court.length, y=this.court[0].length
+            getNetDist = Math.sqrt(Math.pow(Math.abs(this.court.length-posShotter[0]),2) + Math.pow(Math.abs(this.court[0].length/2-posShotter[1]),2));
+        else //Aqui o cesto vai tar na posição x=0, y=this.court[0].length
+            getNetDist = Math.sqrt(Math.pow(Math.abs(0-posShotter[0]),2) + Math.pow(Math.abs(this.court[0].length-posShotter[1]),2));
         return getNetDist;
     }
 
@@ -463,7 +463,7 @@ public class BasketballCourt implements Serializable {
         else
             this.restartPos("a");
 
-        System.out.println("Other team has posession now!");
+        System.out.println("Other team has possession now!");
         return points;
     }
 }
