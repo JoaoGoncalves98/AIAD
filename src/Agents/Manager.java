@@ -40,8 +40,6 @@ public class Manager extends Agent {
             // Search Game
             while(this.agentGame == null) {
 
-                System.out.println("searching game");
-
                 this.agentGame = this.father.utils.getService("game");
 
                 ACLMessage m = new ACLMessage( ACLMessage.INFORM );
@@ -66,15 +64,13 @@ public class Manager extends Agent {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
-                System.out.println("running manager");
 
                 ACLMessage msg = receive();
 
                 if (msg != null) {
-                    System.out.println("manager caught msg!");
                     AID sender = msg.getSender();
                     if (Utils.JOINNED.equals( msg.getContent() )) {
-                        System.out.println("Joined game!");
+                        System.out.println("Manager joined game!");
                         this.joinned = true;
                     } else if (Utils.FAILED.equals( msg.getContent() )) {
                         System.out.println("Error couldn't join a game!");
@@ -105,11 +101,8 @@ public class Manager extends Agent {
 
         public void action()
         {
-            System.out.println("MANAGER IS HERE!!!!!!!!!!!");
             // Check if Game started
             while(this.agentGame == null) {
-
-                System.out.println("game started? -- MAN");
 
                 this.agentGame = this.father.utils.getService("gamestarted");
 
@@ -145,7 +138,6 @@ public class Manager extends Agent {
                             {
                                 try
                                 {
-                                    System.out.println("MANAGER OF TEAM " + "" + " GOT MESSAGE");
                                     int[] score = (int[]) msg2.getContentObject();
                                     System.out.println("SCORE: A:" + score[0] + " B:" + score[1]);
 

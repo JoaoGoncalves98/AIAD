@@ -47,7 +47,6 @@ public class Referee extends Agent {
 			// Search Game
 			while(this.agentGame == null) {
 
-				System.out.println("searching game");
 
 				this.agentGame = this.father.utils.getService("game");
 
@@ -74,12 +73,10 @@ public class Referee extends Agent {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				System.out.println("running referee");
 
 				ACLMessage msg = receive();
 
 				if (msg != null) {
-					System.out.println("referee caught msg!");
 					AID sender = msg.getSender();
 					if (Utils.JOINNED.equals( msg.getContent() )) {
 						System.out.println("Referee joined game!");
@@ -121,12 +118,10 @@ public class Referee extends Agent {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				System.out.println("referee waiting!");
 
 				ACLMessage msg = receive();
 
 				if (msg != null) {
-					System.out.println("referee caught msg!");
 					AID sender = msg.getSender();
 					if (Utils.STARTGAME.equals( msg.getContent() )) {
 						System.out.println("Referee will start the clock!");

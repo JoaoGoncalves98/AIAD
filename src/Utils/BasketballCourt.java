@@ -6,7 +6,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class BasketballCourt implements Serializable {
     private int nPlayers = 0;
-    private String court[][];
+    public String court[][];
     private char team1C;
     private char team2C;
 
@@ -300,6 +300,7 @@ public class BasketballCourt implements Serializable {
     public boolean closeBasktet( String s ) {
         int[] pos = this.getPos(s);
         double dist = 0;
+
         if(s.toLowerCase().contains("a"))
             dist = Math.sqrt(Math.pow(pos[0]-this.court.length,2)+Math.pow(pos[1]-this.court[0].length/2,2));
         else
@@ -466,4 +467,6 @@ public class BasketballCourt implements Serializable {
         System.out.println("Other team has possession now!");
         return points;
     }
+
+
 }

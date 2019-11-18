@@ -57,7 +57,6 @@ public class Player extends Agent {
 			// Search Game
 			while(this.agentGame == null) {
 
-				System.out.println("searching game");
 
 				this.agentGame = this.father.utils.getService("game");
 
@@ -83,18 +82,16 @@ public class Player extends Agent {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				System.out.println("running player");
 
 				ACLMessage msg = receive();
 
 				if (msg != null) {
-					System.out.println("player caught msg!");
 					AID sender = msg.getSender();
 					if (Utils.JOINNED.equals( msg.getContent() )) {
-						System.out.println("PLAYER JOINED GAME!");
+						System.out.println("A player joined the game!");
 						this.joinned = true;
 					} else if (Utils.FAILED.equals( msg.getContent() )) {
-						System.out.println("Error couldn't join a game!");
+						System.out.println("Error, a player couldn't join the game!");
 					} else {
 						System.out.println("Got the wrong message?!?");
 					}
@@ -129,7 +126,6 @@ public class Player extends Agent {
 			while(this.agentGame == null) {
 				// ESPERANDO Q O JOGO COMECE
 				this.agentGame = this.father.utils.getService("gamestarted");
-				System.out.println("game started? -- PLAYER");
 				try { Thread.sleep(1000);} catch (InterruptedException e) { e.printStackTrace(); }
 			}
 
@@ -145,7 +141,6 @@ public class Player extends Agent {
 							if (msg2 != null) {
 								f = false;
 								try {
-									System.out.println("MSG that should be court content: " + msg2.getContentObject());
 									BasketballCourt court = (BasketballCourt) msg2.getContentObject();
 
 									if(getLocalName().toLowerCase().contains("a")){
@@ -166,7 +161,6 @@ public class Player extends Agent {
 
 									if(court.hasBall(getLocalName()) && (!court.openSpace(getLocalName(), 3) || court.closeBasktet(getLocalName()) ))
 									{
-										System.out.println("has ball");
 										ACLMessage m = new ACLMessage( ACLMessage.INFORM );
 
 										// passa a bola
@@ -181,7 +175,6 @@ public class Player extends Agent {
 
 										if(random <=10)
 										{
-											System.out.println(court.teammateName(getLocalName()) + " ");
 											m.setContent(Utils.PASS + " " + court.teammateName(getLocalName()) + " " + stats.getpassPercentage());
 											m.addReceiver( this.agentGame );
 
@@ -192,7 +185,7 @@ public class Player extends Agent {
 											//lança a bola
 											double dist=court.distToBasket(getLocalName());
 											double prob = 10;
-											prob += (1-(dist/(Math.sqrt(Math.pow(20,2) + Math.pow(5,2)))))*50; //Pode aumentar a prob de lançar ate +50%
+											prob += (1-(dist/(Math.sqrt(Math.pow(court.court.length,2) + Math.pow(court.court[0].length,2)))))*50; //Pode aumentar a prob de lançar ate +50%
 											if(court.openSpace(getLocalName(),2)) prob += 20;
 											else if(court.openSpace(getLocalName(),1)) prob += 10;
 
@@ -206,20 +199,16 @@ public class Player extends Agent {
 											}
 										}
 									}
-									else
-										System.out.println("hasn't ball");
 
 
 									if( getLocalName().contains("a") ) {
-										System.out.println("enterd in a team agent");
 										int[] pos = court.getPos(getLocalName());
-										System.out.println(getLocalName() + " got position and it is equals to: " + pos[0] + " " + pos[1]);
+										System.out.println(getLocalName() + " is in position: i=" + pos[0] + " j=" + pos[1]);
 
 										ACLMessage m = new ACLMessage( ACLMessage.INFORM );
 
 										//random para saber qual é direção que o jogador quer mover
 										double random =  Math.random()*100;
-										System.out.println("random-number is:" + random);
 
 										//Mover para a frente
 										if (random <=28 && court.openSpaceInDir(getLocalName(),"U"))
@@ -258,15 +247,14 @@ public class Player extends Agent {
 										send( m );
 									}
 									else {
-										System.out.println("entered in b team agent");
+						
 										int[] pos = court.getPos(getLocalName());
-										System.out.println(getLocalName() + " got position and it is equals to: " + pos[0] + " " + pos[1]);
+										System.out.println(getLocalName() + " is in position: i=" + pos[0] + " j=" + pos[1]);
 
 										ACLMessage m = new ACLMessage( ACLMessage.INFORM );
 
 										//random para saber qual é direção que o jogador quer mover
 										double random =  Math.random()*100;
-										System.out.println("random-number is:" + random);
 
 										//Mover para a frente
 										if (random <=28  && court.openSpaceInDir(getLocalName(),"U"))

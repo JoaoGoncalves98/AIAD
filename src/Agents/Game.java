@@ -69,12 +69,9 @@ public class Game extends Agent {
 	            }
 	            catch (Exception e) {}
 	            
-	        	System.out.println("running game" + " players" + this.incPlayers + " ref" + this.incReferee + " mans" + this.incManagers);
 	        	
 	            if (msg != null) {
-	            	System.out.println("game caught msg!");
 	            	AID sender = msg.getSender();
-	            	System.out.println(sender.getLocalName());
 	                if (Utils.JOIN.equals( msg.getContent() )) {
 	                	if(this.father.getTeam1().addPlayer(sender)) {
 	                		ACLMessage m = new ACLMessage( ACLMessage.INFORM );
@@ -84,7 +81,7 @@ public class Game extends Agent {
 	                        send( m );
 	                        
 	                        this.incPlayers++;
-							System.out.println("SUCCESSED TO ALOCATE PLAYER TO TEAMA");
+							System.out.println("SUCCESSED TO ALOCATE PLAYER TO TEAM A");
 	                	} else if(this.father.getTeam2().addPlayer(sender)) {
 	                		ACLMessage m = new ACLMessage( ACLMessage.INFORM );
 	                        m.setContent(Utils.JOINNED);
@@ -93,7 +90,7 @@ public class Game extends Agent {
 	                        send( m );
 	                        
 	                        this.incPlayers++;
-							System.out.println("SUCCESSED TO ALOCATE PLAYER TO TEAMB");
+							System.out.println("SUCCESSED TO ALOCATE PLAYER TO TEAM B");
 	            		} else {
 	                		System.out.println("FAILED TO ALOCATE PLAYER TO TEAM");
 						}
@@ -133,9 +130,7 @@ public class Game extends Agent {
 
 							send( m );
 						}
-					} else {
-            			System.out.println("This message wasn't suposed to come here xd");
-            		}
+					}
 	            } else {
 	                // if no message is arrived, block the behaviour
 	                block();
@@ -183,9 +178,7 @@ public class Game extends Agent {
 				ACLMessage msg = receive();
 
 				if (msg != null) {
-					System.out.println("game caught msg!");
 					AID sender = msg.getSender();
-					System.out.println(sender);
 					if (Utils.STARTEDGAME.equals( msg.getContent() )) {
 						this.flag = !this.flag;
 					}
@@ -194,7 +187,6 @@ public class Game extends Agent {
 					block();
 				}
 			}
-			System.out.println("READY FOR CALCULATIONS!");
 			this.finished = true;
 		}
 
@@ -232,7 +224,6 @@ public class Game extends Agent {
 				// Broadcast !!!
 				while(this.gameGoing) {
 				    // VE SE JOGO JA ACABOU
-					System.out.println("GAME STILL GOIN!G");
                     ACLMessage msg0 = receive();
                     if (msg0 != null) {
                         this.endgame(msg0);
@@ -257,7 +248,6 @@ public class Game extends Agent {
 
 						ACLMessage m1 = new ACLMessage( ACLMessage.INFORM );
 						m1.setContent( Utils.SCORE );
-						System.out.println("TEAM " + team + " MANAGER");
 						m1.addReceiver(team.getManager());
 						send(m1);
 						try {
@@ -277,7 +267,6 @@ public class Game extends Agent {
                                 this.endgame(msg);
 								if(Utils.ACK.equals(msg.getContent()))
 								{
-									System.out.println("CONTINUE WITH THE GAME");
 									f = false;
 								}
 							}
@@ -297,9 +286,6 @@ public class Game extends Agent {
 
                         ACLMessage m1 = new ACLMessage( ACLMessage.INFORM );
                         m1.setContent( Utils.PLAY );
-						System.out.println("TEAM = " + team);
-						System.out.println("TEAM PLAYERS = " + team.players);
-						System.out.println("INDEX = " + i/2);
                         m1.addReceiver( team.players.get(i/2) );
                         send( m1 );
                         try {
@@ -313,43 +299,33 @@ public class Game extends Agent {
                         boolean f = true;
                         while(f) {
                             ACLMessage msg = receive();
-                            System.out.println("GAME WAITING FOR" + team.players.get(i/2));
                             if (msg != null) {
                                 AID player = msg.getSender();
-								System.out.println("GAME CAUGHT MSG! From " + player.getLocalName());
-								System.out.println("AND I IS = " + i);
-								System.out.println("AND I/2 IS = " + i/2);
-								System.out.println("AID sent to is = " + team.players.get(i/2));
-								System.out.println("AID received from is = " + player);
                                 this.endgame(msg);
                                 if (player.getLocalName().equals(team.players.get(i / 2).getLocalName())) {
                                     String content = (String) msg.getContent();
-                                    System.out.println("MESSAGE IN GAME HAS: " + content);
                                     if (content.contains(Utils.RUN)) {
                                         // process run
 										String[] tokens = content.split(" ");
 
-										System.out.println(player.getLocalName() + " wants to run");
-										System.out.println(player.getLocalName() + " WANTS TO RUN TO:" + Integer.parseInt(tokens[1]) + " " + Integer.parseInt(tokens[2]));
+										System.out.println(player.getLocalName() + " wants to run to position: i=" + Integer.parseInt(tokens[1]) + " j=" + Integer.parseInt(tokens[2]));
 
 										if(this.father.court.updatePos(player.getLocalName(), Integer.parseInt(tokens[1]), Integer.parseInt(tokens[2])))
-											System.out.println(player.getLocalName() + " and ruunnnnnnnnnn");
+											System.out.println(player.getLocalName() + " moved successfully");
 										else
-											System.out.println(player.getLocalName() + " but didnt ruuuuuuuuun");
+											System.out.println(player.getLocalName() + " couldn't move");
 
                                         f = false;
                                     } else if (content.contains(Utils.PASS)) {
                                         // process pass
 										String[] tokens = content.split(" ");
-
-										System.out.println(player.getLocalName() + " wants to pass");
-										System.out.println(player.getLocalName() + " WANTS TO PASS TO:" + tokens[1] + " WITH PASS STAT OF: " + Integer.parseInt(tokens[2]));
+										System.out.println(player.getLocalName() + " wants to pass to: " + tokens[1] + " with a pass rating of: " + Integer.parseInt(tokens[2]));
 
 
 										if(this.father.court.makePass(player.getLocalName(), tokens[1], Integer.parseInt(tokens[2])))
 											System.out.println(player.getLocalName() + " and passed successfully");
 										else
-											System.out.println(player.getLocalName() + " and the pass was a failed");
+											System.out.println(player.getLocalName() + " and the pass was missed");
 
                                         f = false;
                                     } else if (content.contains(Utils.LAUNCH)) {
