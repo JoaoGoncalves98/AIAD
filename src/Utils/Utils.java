@@ -24,6 +24,7 @@ public class Utils {
     // Mensagens a usar nos managers
     public final static String AGRESSIVE = "AGRESSIVE";
     public final static String PASSIVE = "PASSIVE";
+    public final static String TATICS = "TATICS";
     public final static String ACK = "ACK";
 
     private Agent agent = null;
@@ -53,10 +54,8 @@ public class Utils {
     {
         try {
             DFService.deregister( this.agent );
-            System.out.println("DESREGISTOU CRL.....................");
         }
         catch (Exception e) {
-            System.out.println("NÃO DESREGISTOU CRL.....................");
         }
     }
 

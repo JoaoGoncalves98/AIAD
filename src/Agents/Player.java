@@ -115,6 +115,8 @@ public class Player extends Agent {
 		private Player father;
 		private AID agentGame = null;
 		private boolean joinned = false;
+		private AID tatics = null;
+		private boolean agressive = false;
 
 		public playingGame( Agent a ) {
 			super(a);
@@ -146,6 +148,22 @@ public class Player extends Agent {
 									System.out.println("MSG that should be court content: " + msg2.getContentObject());
 									BasketballCourt court = (BasketballCourt) msg2.getContentObject();
 
+									if(getLocalName().toLowerCase().contains("a")){
+								 		this.tatics = this.father.utils.getService(Utils.TATICS + " A " + Utils.AGRESSIVE);
+										if(this.tatics == null) {
+											this.tatics = this.father.utils.getService(Utils.TATICS + " A " + Utils.PASSIVE);
+											this.agressive = false;
+										} else
+											this.agressive = true;
+									} else {
+										this.tatics = this.father.utils.getService(Utils.TATICS + " B " + Utils.AGRESSIVE);
+										if(this.tatics == null) {
+											this.tatics = this.father.utils.getService(Utils.TATICS + " B " + Utils.PASSIVE);
+											this.agressive = false;
+										} else
+											this.agressive = true;
+									}
+
 									if(court.hasBall(getLocalName()) && (!court.openSpace(getLocalName(), 3) || court.closeBasktet(getLocalName()) ))
 									{
 										System.out.println("has ball");
@@ -157,6 +175,9 @@ public class Player extends Agent {
 											random-=40;
 										else if(getLocalName().contains("b") && (court.getPos(court.teammateName(getLocalName()))[0] < court.getPos(getLocalName())[0]))
 											random-=40;
+
+										if(this.agressive)
+											random+=20; //bigger prob to shoot
 
 										if(random <=10)
 										{

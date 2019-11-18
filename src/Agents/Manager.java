@@ -4,6 +4,7 @@ import Utils.*;
 import jade.core.Agent;
 import jade.core.behaviours.*;
 import jade.core.AID;
+import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 
 public class Manager extends Agent {
@@ -95,6 +96,7 @@ public class Manager extends Agent {
     class manageTeam extends SimpleBehaviour {
         private Manager father;
         private AID agentGame = null;
+        private boolean agressive = false;
 
         public manageTeam( Agent a ) {
             super(a);
@@ -118,7 +120,17 @@ public class Manager extends Agent {
                     e.printStackTrace();
                 }
             }
-
+            if (getLocalName().contains("A")) {
+                ServiceDescription sd0 = new ServiceDescription();
+                sd0.setName(getLocalName());
+                sd0.setType(Utils.TATICS + " A " + Utils.AGRESSIVE);
+                this.father.utils.register(sd0);
+            } else {
+                ServiceDescription sd0 = new ServiceDescription();
+                sd0.setName(getLocalName());
+                sd0.setType(Utils.TATICS + " B " + Utils.AGRESSIVE);
+                this.father.utils.register(sd0);
+            }
             /*CICLO PARA SELECIONAR A TATICA A USAR*/
             while(this.agentGame != null) {
                 this.agentGame = this.father.utils.getService("gamestarted");
@@ -137,8 +149,36 @@ public class Manager extends Agent {
                                     int[] score = (int[]) msg2.getContentObject();
                                     System.out.println("SCORE: A:" + score[0] + " B:" + score[1]);
 
-                                    //TODO
-                                    // Medidante a pontuação da sua equipa ele decide qual a tática a usar
+                                    //  react
+                                    if (getLocalName().contains("A")) {
+                                        ServiceDescription sd  = new ServiceDescription();
+                                        sd.setName( getLocalName() );
+                                        if(score[0] <= score[1] && !this.agressive) {
+                                            this.father.utils.takeDown();
+                                            sd.setType( Utils.TATICS + " A " + Utils.AGRESSIVE);
+                                            this.agressive = true;
+                                            this.father.utils.register( sd );
+                                        } else if (score[0] > score[1] && this.agressive) {
+                                            this.father.utils.takeDown();
+                                            sd.setType( Utils.TATICS + " A " + Utils.PASSIVE );
+                                            this.agressive = false;
+                                            this.father.utils.register( sd );
+                                        }
+                                    } else {
+                                        ServiceDescription sd  = new ServiceDescription();
+                                        sd.setName( getLocalName() );
+                                        if(score[0] <= score[1] && !this.agressive) {
+                                            this.father.utils.takeDown();
+                                            sd.setType( Utils.TATICS + " B " + Utils.AGRESSIVE );
+                                            this.agressive = true;
+                                            this.father.utils.register( sd );
+                                        } else if (score[0] > score[1] && this.agressive) {
+                                            this.father.utils.takeDown();
+                                            sd.setType( Utils.TATICS + " B " + Utils.PASSIVE );
+                                            this.agressive = false;
+                                            this.father.utils.register( sd );
+                                        }
+                                    }
 
                                     ACLMessage m1 = new ACLMessage( ACLMessage.INFORM );
                                     m1.setContent( Utils.ACK );
