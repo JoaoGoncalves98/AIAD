@@ -166,9 +166,9 @@ public class Player extends Agent {
 										// passa a bola
 										double random =  Math.random()*100;
 										if(getLocalName().contains("a") && (court.getPos(court.teammateName(getLocalName()))[0] > court.getPos(getLocalName())[0]))
-											random-=40;
+											random-=60;
 										else if(getLocalName().contains("b") && (court.getPos(court.teammateName(getLocalName()))[0] < court.getPos(getLocalName())[0]))
-											random-=40;
+											random-=60;
 
 										if(this.agressive)
 											random+=20; //bigger prob to shoot
