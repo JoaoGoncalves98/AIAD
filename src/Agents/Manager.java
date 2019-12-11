@@ -7,6 +7,11 @@ import jade.core.AID;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+
 public class Manager extends Agent {
 
     private Utils utils = new Utils( this );
@@ -140,9 +145,15 @@ public class Manager extends Agent {
                                 {
                                     int[] score = (int[]) msg2.getContentObject();
                                     System.out.println("SCORE: A:" + score[0] + " B:" + score[1]);
-
                                     //  react
                                     if (getLocalName().contains("A")) {
+                                        try {
+                                            PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("logs/rapidData.csv", true)));
+                                            out.println(this.agressive + ", " + this.agressive + ", " + (score[0]-score[1]) + ",");
+                                            out.close();
+                                        } catch (IOException e) {
+                                            //exception handling left as an exercise for the reader
+                                        }
                                         ServiceDescription sd  = new ServiceDescription();
                                         sd.setName( getLocalName() );
                                         if(score[0] <= score[1] && !this.agressive) {
@@ -150,6 +161,7 @@ public class Manager extends Agent {
                                             sd.setType( Utils.TATICS + " A " + Utils.AGRESSIVE);
                                             this.agressive = true;
                                             this.father.utils.register( sd );
+                                            System.out.println();
                                         } else if (score[0] > score[1] && this.agressive) {
                                             this.father.utils.takeDown();
                                             sd.setType( Utils.TATICS + " A " + Utils.PASSIVE );
@@ -157,6 +169,13 @@ public class Manager extends Agent {
                                             this.father.utils.register( sd );
                                         }
                                     } else {
+                                        try {
+                                            PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("logs/rapidData.csv", true)));
+                                            out.println(this.agressive + ", " + this.agressive + ", " + (score[0]-score[1]) + ",");
+                                            out.close();
+                                        } catch (IOException e) {
+                                            //exception handling left as an exercise for the reader
+                                        }
                                         ServiceDescription sd  = new ServiceDescription();
                                         sd.setName( getLocalName() );
                                         if(score[0] <= score[1] && !this.agressive) {

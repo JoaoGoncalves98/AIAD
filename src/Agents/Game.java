@@ -65,7 +65,7 @@ public class Game extends Agent {
 	            ACLMessage msg = receive();
 
 	            try {
-	               Thread.sleep(500);
+	               Thread.sleep(1);
 	            }
 	            catch (Exception e) {}
 	            
@@ -171,7 +171,7 @@ public class Game extends Agent {
 				System.out.println("warning ref - everything ready!");
 
 				try {
-					Thread.sleep(2000);
+					Thread.sleep(1);
 				}
 				catch (Exception e) {}
 
@@ -231,7 +231,7 @@ public class Game extends Agent {
                         // if no message is arrived, block the behaviour
                         block();
                     }
-                    try { Thread.sleep(1000); } catch (Exception e) {}
+                    try { Thread.sleep(1); } catch (Exception e) {}
 
                     // JOGADA AGENTE A AGENTE
                     Team team = null;
@@ -247,7 +247,7 @@ public class Game extends Agent {
 						}
 
 						ACLMessage m1 = new ACLMessage( ACLMessage.INFORM );
-						m1.setContent( Utils.SCORE );
+						m1.setContent( Utils.SCORE);
 						m1.addReceiver(team.getManager());
 						send(m1);
 						try {
@@ -346,7 +346,7 @@ public class Game extends Agent {
                                 // if no message is arrived, block the behaviour
                                 block();
                             }
-                            try { Thread.sleep(1000); } catch (Exception e) {}
+                            try { Thread.sleep(1); } catch (Exception e) {}
                         }
                     }
                 }
