@@ -7,7 +7,10 @@ import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import jade.domain.FIPAAgentManagement.*;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 public class Game extends Agent {
 
@@ -20,7 +23,6 @@ public class Game extends Agent {
 	private BasketballCourt court = new BasketballCourt(4, 'A', 'B', 8, 6);
 
 	private int[] score = new int[2]; // Pontuação
-	
 	protected void setup() {
         ServiceDescription sd  = new ServiceDescription();
         sd.setType( "game" );
@@ -222,7 +224,10 @@ public class Game extends Agent {
 				this.father.utils.register( sd );
 
 				// Broadcast !!!
-				while(this.gameGoing) {
+				PrintWriter out;
+				try{
+					out = new PrintWriter(new BufferedWriter(new FileWriter("logs/rapidData.csv", true)));
+					while(this.gameGoing) {
 				    // VE SE JOGO JA ACABOU
                     ACLMessage msg0 = receive();
                     if (msg0 != null) {
@@ -247,6 +252,7 @@ public class Game extends Agent {
 						}
 
 						ACLMessage m1 = new ACLMessage( ACLMessage.INFORM );
+
 						m1.setContent( Utils.SCORE);
 						m1.addReceiver(team.getManager());
 						send(m1);
@@ -300,6 +306,7 @@ public class Game extends Agent {
                         while(f) {
                             ACLMessage msg = receive();
                             if (msg != null) {
+
                                 AID player = msg.getSender();
                                 this.endgame(msg);
                                 if (player.getLocalName().equals(team.players.get(i / 2).getLocalName())) {
@@ -328,6 +335,17 @@ public class Game extends Agent {
 											System.out.println(player.getLocalName() + " and the pass was missed");
 
                                         f = false;
+											if(player.getLocalName().toLowerCase().contains(""+'a'))
+											{
+												System.out.println("\n\nteste: " + player.getLocalName().toLowerCase());
+												out.write("A, true, false, " + Manager.aTactic + ", B, false, false, " + Manager.bTactic + ", " + (this.father.score[0]-this.father.score[1])+ ",\n");
+												out.flush();
+											}
+											else
+											{
+												out.write("A, false, false, " + Manager.aTactic + ", B, true, false, " + Manager.bTactic + ", " + (this.father.score[0]-this.father.score[1])+ ",\n");
+												out.flush();
+											}
                                     } else if (content.contains(Utils.LAUNCH)) {
                                         // process launch
 										String[] tokens = content.split(" ");
@@ -338,7 +356,22 @@ public class Game extends Agent {
 											this.father.score[1]+=this.father.court.shootBall(player.getLocalName(), Integer.parseInt(tokens[1]), Integer.parseInt(tokens[2]));
 
                                         f = false;
+
+											if(player.getLocalName().toLowerCase().contains(""+'a'))
+											{
+												System.out.println("\n\nteste: " + player.getLocalName().toLowerCase());
+												out.write("A, false, true, " + Manager.aTactic + ", B, false, false, " + Manager.bTactic + ", " + (this.father.score[0]-this.father.score[1])+ ",\n");
+												out.flush();
+											}
+											else
+											{
+												System.out.println("\n\nteste: " + player.getLocalName().toLowerCase());
+												out.write("A, false, false, " + Manager.aTactic + ", B, false, true, " + Manager.bTactic + ", " + (this.father.score[0]-this.father.score[1])+ ",\n");
+												out.flush();
+											}
+
                                     }
+
                                 } else {
                                     System.out.println("Wrong player to choose play!");
                                 }
@@ -350,14 +383,20 @@ public class Game extends Agent {
                         }
                     }
                 }
+				}
+				catch (IOException e) {
+					//exception handling left as an exercise for the reader
+				}
 				this.finished = true;
 			}
 
-			public void endgame( ACLMessage msg0 ) {
+			public boolean endgame( ACLMessage msg0 ) {
                 if (Utils.ENDEDGAME.equals( msg0.getContent() )) {
                     this.gameGoing = !this.gameGoing;
                     this.father.utils.takeDown(); // Deletes DF entry
+					return true;
                 }
+                return false;
             }
 
 
