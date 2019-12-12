@@ -74,8 +74,12 @@ public class Game extends Agent {
 	        	
 	            if (msg != null) {
 	            	AID sender = msg.getSender();
-	                if (Utils.JOIN.equals( msg.getContent() )) {
-	                	if(this.father.getTeam1().addPlayer(sender)) {
+                    if (msg.getContent().contains(Utils.JOIN + " ")) {
+
+                        String[] tokens = msg.getContent().split(" ");
+                        System.out.println("PLAYER: " + sender + " of type " + Integer.parseInt(tokens[1]));
+
+                        if(this.father.getTeam1().addPlayer(sender, Integer.parseInt(tokens[1]))) {
 	                		ACLMessage m = new ACLMessage( ACLMessage.INFORM );
 	                        m.setContent(Utils.JOINNED);
 	                        m.addReceiver( sender );
@@ -84,7 +88,7 @@ public class Game extends Agent {
 	                        
 	                        this.incPlayers++;
 							System.out.println("SUCCESSED TO ALOCATE PLAYER TO TEAM A");
-	                	} else if(this.father.getTeam2().addPlayer(sender)) {
+	                	} else if(this.father.getTeam2().addPlayer(sender, Integer.parseInt(tokens[1]))) {
 	                		ACLMessage m = new ACLMessage( ACLMessage.INFORM );
 	                        m.setContent(Utils.JOINNED);
 	                        m.addReceiver( sender );

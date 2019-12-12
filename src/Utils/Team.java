@@ -7,7 +7,8 @@ import java.util.ArrayList;
 import jade.core.AID;
 
 public class Team {
-	public ArrayList<AID> players = new ArrayList<AID>();
+    public ArrayList<AID> players = new ArrayList<AID>();
+    public ArrayList<Integer> type = new ArrayList<Integer>();
 	private ArrayList<Player> playersInfo = new ArrayList<>(); //ainda esta vazio
 	private int nPlayers = 0;
 	private String name;
@@ -22,7 +23,7 @@ public class Team {
 		this.name = name;
 	}
 	
-	public boolean addPlayer(AID player) {
+	public boolean addPlayer(AID player, int type) {
 		System.out.print(this.name.toLowerCase() + " is trying to enter team " + player.getLocalName().toLowerCase() + "... ");
 		if(player.getLocalName().toLowerCase().contains(this.name.toLowerCase()))
 		{
@@ -34,7 +35,8 @@ public class Team {
 		if(player.getLocalName().toLowerCase().contains(this.name.toLowerCase()))
 			if (this.players.size() < this.nPlayers) {
 				System.out.println("Team " + name + "added player " + player.getLocalName());
-				this.players.add(player);
+                this.players.add(player);
+                this.type.add(type);
 				return true;
 			}
 		return false;

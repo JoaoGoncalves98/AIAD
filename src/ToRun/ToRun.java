@@ -52,7 +52,7 @@ public class ToRun  extends Agent {
             managerController.start();
 
             // CREATING PLAYERS
-            AgentController playerController = containerController.createNewAgent("a1", "Agents.Player", null);
+            AgentController playerController = containerController.createNewAgent("a1", "Agents.Player", new Object[] {new Integer(1)});
             playerController.start();
             playerController = containerController.createNewAgent("a2", "Agents.Player", null);
             playerController.start();
