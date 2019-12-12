@@ -15,7 +15,9 @@ import java.io.PrintWriter;
 public class Manager extends Agent {
 
     private Utils utils = new Utils( this );
-    
+    public static boolean aTactic=false;
+    public static boolean bTactic=false;
+
 	protected void setup()
     {
         /* Does first behaviour */
@@ -147,47 +149,38 @@ public class Manager extends Agent {
                                     System.out.println("SCORE: A:" + score[0] + " B:" + score[1]);
                                     //  react
                                     if (getLocalName().contains("A")) {
-                                        try {
-                                            PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("logs/rapidData.csv", true)));
-                                            out.println(this.agressive + ", " + this.agressive + ", " + (score[0]-score[1]) + ",");
-                                            out.close();
-                                        } catch (IOException e) {
-                                            //exception handling left as an exercise for the reader
-                                        }
                                         ServiceDescription sd  = new ServiceDescription();
                                         sd.setName( getLocalName() );
                                         if(score[0] <= score[1] && !this.agressive) {
                                             this.father.utils.takeDown();
                                             sd.setType( Utils.TATICS + " A " + Utils.AGRESSIVE);
                                             this.agressive = true;
+                                            Manager.this.aTactic=true;
                                             this.father.utils.register( sd );
                                             System.out.println();
                                         } else if (score[0] > score[1] && this.agressive) {
                                             this.father.utils.takeDown();
                                             sd.setType( Utils.TATICS + " A " + Utils.PASSIVE );
                                             this.agressive = false;
+                                            Manager.this.aTactic=false;
                                             this.father.utils.register( sd );
                                         }
-                                    } else {
-                                        try {
-                                            PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("logs/rapidData.csv", true)));
-                                            out.println(this.agressive + ", " + this.agressive + ", " + (score[0]-score[1]) + ",");
-                                            out.close();
-                                        } catch (IOException e) {
-                                            //exception handling left as an exercise for the reader
-                                        }
-                                        ServiceDescription sd  = new ServiceDescription();
-                                        sd.setName( getLocalName() );
-                                        if(score[0] <= score[1] && !this.agressive) {
+                                    }
+                                    else {
+                                        ServiceDescription sd = new ServiceDescription();
+                                        sd.setName(getLocalName());
+                                        if (score[1] <= score[0] && !this.agressive) {
                                             this.father.utils.takeDown();
-                                            sd.setType( Utils.TATICS + " B " + Utils.AGRESSIVE );
+                                            sd.setType(Utils.TATICS + " B " + Utils.AGRESSIVE);
                                             this.agressive = true;
-                                            this.father.utils.register( sd );
-                                        } else if (score[0] > score[1] && this.agressive) {
+                                            Manager.this.bTactic=true;
+                                            this.father.utils.register(sd);
+                                        } else if (score[1] > score[0] && this.agressive) {
                                             this.father.utils.takeDown();
-                                            sd.setType( Utils.TATICS + " B " + Utils.PASSIVE );
+                                            sd.setType(Utils.TATICS + " B " + Utils.PASSIVE);
                                             this.agressive = false;
-                                            this.father.utils.register( sd );
+                                            Manager.this.bTactic=false;
+                                            this.father.utils.register(sd);
                                         }
                                     }
 
