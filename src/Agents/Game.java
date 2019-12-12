@@ -64,6 +64,7 @@ public class Game extends Agent {
 		public void action() 
         {
 			while(this.incPlayers != this.nPlayers || this.incReferee != 1 || this.incManagers != 2 ) {
+
 	            ACLMessage msg = receive();
 
 	            try {
@@ -321,9 +322,9 @@ public class Game extends Agent {
                                 this.endgame(msg);
                                 if (player.getLocalName().equals(team.players.get(i / 2).getLocalName())) {
 									//try { Thread.sleep(10); } catch (Exception e) {}
-									String content = "none";
+									String content = null;
                                     long startTime2 = System.currentTimeMillis(); //time out a second and a half
-                                    while(content == "none" && (System.currentTimeMillis()-startTime2)<1500)
+                                    while(content == null && (System.currentTimeMillis()-startTime2)<1500)
 										content = (String) msg.getContent();
                                     if(content == null)
                                         content = "none";

@@ -56,10 +56,7 @@ public class Player extends Agent {
 
 			// Search Game
 			while(this.agentGame == null) {
-
-
 				this.agentGame = this.father.utils.getService("game");
-
 				ACLMessage m = new ACLMessage( ACLMessage.INFORM );
 				m.setContent(Utils.JOIN + " " + this.father.stats.gettype());
 				m.addReceiver( this.agentGame );
