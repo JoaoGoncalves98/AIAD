@@ -110,6 +110,16 @@ public class BasketballCourt implements Serializable {
         return false;
     }
 
+    public String hasPossession() {
+        for(int i = 0 ; i < this.court.length ; i++)
+            for(int j = 0 ; j < this.court[0].length ; j++ )
+                if(this.court[i][j].contains("A"))
+                    return "A";
+                else if(this.court[i][j].contains("B"))
+                    return "B";
+        return "false";
+    }
+
     public String teammateName ( String s) {
         for (int i = 0; i < this.court.length; i++) {
             for (int j = 0; j < this.court[0].length; j++)

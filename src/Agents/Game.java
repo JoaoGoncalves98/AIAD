@@ -330,6 +330,10 @@ public class Game extends Agent {
 										else
 											System.out.println(player.getLocalName() + " couldn't move");
 
+
+                                        out.write("A, false, false, " + Manager.aTactic + ", B, false, false, " + Manager.bTactic + ", " + this.father.court.hasPossession() + ", " + (this.father.score[0]-this.father.score[1])+ ",\n");
+                                        out.flush();
+
                                         f = false;
                                     } else if (content.contains(Utils.PASS)) {
                                         // process pass
@@ -346,12 +350,12 @@ public class Game extends Agent {
 											if(player.getLocalName().toLowerCase().contains(""+'a'))
 											{
 												System.out.println("\n\nteste: " + player.getLocalName().toLowerCase());
-												out.write("A, true, false, " + Manager.aTactic + ", B, false, false, " + Manager.bTactic + ", " + (this.father.score[0]-this.father.score[1])+ ",\n");
+												out.write("A, true, false, " + Manager.aTactic + ", B, false, false, " + Manager.bTactic + ", " + this.father.court.hasPossession() + ", " + (this.father.score[0]-this.father.score[1])+ ",\n");
 												out.flush();
 											}
 											else
 											{
-												out.write("A, false, false, " + Manager.aTactic + ", B, true, false, " + Manager.bTactic + ", " + (this.father.score[0]-this.father.score[1])+ ",\n");
+												out.write("A, false, false, " + Manager.aTactic + ", B, true, false, " + Manager.bTactic + ", " + this.father.court.hasPossession() + ", " + (this.father.score[0]-this.father.score[1])+ ",\n");
 												out.flush();
 											}
                                     } else if (content.contains(Utils.LAUNCH)) {
@@ -368,13 +372,13 @@ public class Game extends Agent {
 											if(player.getLocalName().toLowerCase().contains(""+'a'))
 											{
 												System.out.println("\n\nteste: " + player.getLocalName().toLowerCase());
-												out.write("A, false, true, " + Manager.aTactic + ", B, false, false, " + Manager.bTactic + ", " + (this.father.score[0]-this.father.score[1])+ ",\n");
+												out.write("A, false, true, " + Manager.aTactic + ", B, false, false, " + Manager.bTactic + ", " + this.father.court.hasPossession() + ", " + (this.father.score[0]-this.father.score[1])+ ",\n");
 												out.flush();
 											}
 											else
 											{
 												System.out.println("\n\nteste: " + player.getLocalName().toLowerCase());
-												out.write("A, false, false, " + Manager.aTactic + ", B, false, true, " + Manager.bTactic + ", " + (this.father.score[0]-this.father.score[1])+ ",\n");
+												out.write("A, false, false, " + Manager.aTactic + ", B, false, true, " + Manager.bTactic + ", " + this.father.court.hasPossession() + ", " + (this.father.score[0]-this.father.score[1])+ ",\n");
 												out.flush();
 											}
 
