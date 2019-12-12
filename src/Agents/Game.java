@@ -228,9 +228,14 @@ public class Game extends Agent {
 				this.father.utils.register( sd );
 
 				// Broadcast !!!
-				PrintWriter out;
+                PrintWriter out;
+                PrintWriter out2;
 				try{
-					out = new PrintWriter(new BufferedWriter(new FileWriter("logs/rapidData.csv", true)));
+                    out = new PrintWriter(new BufferedWriter(new FileWriter("logs/rapidData.csv", true)));
+                    out2 = new PrintWriter(new BufferedWriter(new FileWriter("logs/rapidData2.csv", true)));
+
+                    out2.write("A" + ", " + this.father.team1.getTypes().get(0) + ", " + this.father.team1.getTypes().get(1) + ", " + "B" + ", " + this.father.team2.getTypes().get(0) + ", " + this.father.team2.getTypes().get(1) + ", " + this.father.court.hasPossession() + ", " + (this.father.score[0]-this.father.score[1])+ ",\n");
+                    out2.flush();
 					while(this.gameGoing) {
 				    // VE SE JOGO JA ACABOU
                     ACLMessage msg0 = receive();
@@ -412,6 +417,17 @@ public class Game extends Agent {
 			public boolean endgame( ACLMessage msg0 ) {
                 if (Utils.ENDEDGAME.equals( msg0.getContent() )) {
                     this.gameGoing = !this.gameGoing;
+
+
+                    PrintWriter out2;
+                    try {
+                        out2 = new PrintWriter(new BufferedWriter(new FileWriter("logs/rapidData2.csv", true)));
+                        out2.write("A" + ", " + this.father.team1.getTypes().get(0) + ", " + this.father.team1.getTypes().get(1) + ", " + "B" + ", " + this.father.team2.getTypes().get(0) + ", " + this.father.team2.getTypes().get(1) + ", " + this.father.court.hasPossession() + ", " + (this.father.score[0] - this.father.score[1]) + ",\n");
+                        out2.flush();
+                    } catch (IOException e) {
+
+                    }
+
                     this.father.utils.takeDown(); // Deletes DF entry
 					return true;
                 }

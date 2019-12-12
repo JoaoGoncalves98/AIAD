@@ -58,9 +58,13 @@ public class Team {
 		return false;
 	}
 
-	public ArrayList<AID> getPlayers() {
-		return players;
-	}
+    public ArrayList<AID> getPlayers() {
+        return players;
+    }
+
+    public ArrayList<Integer> getTypes() {
+        return type;
+    }
 
 	public boolean hasPosession() {
 		return hasPosession;
