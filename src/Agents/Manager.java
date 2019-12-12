@@ -54,7 +54,7 @@ public class Manager extends Agent {
                 send( m );
 
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(1);
                 } catch (InterruptedException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -64,7 +64,7 @@ public class Manager extends Agent {
             while(!this.joinned) {
 
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(1);
                 } catch (InterruptedException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -112,7 +112,7 @@ public class Manager extends Agent {
                 this.agentGame = this.father.utils.getService("gamestarted");
 
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(1);
                 } catch (InterruptedException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();

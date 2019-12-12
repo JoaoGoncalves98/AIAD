@@ -1,12 +1,39 @@
 package ToRun;
 
-import jade.core.Agent;
+import jade.core.*;
+import jade.core.Runtime;
 import jade.wrapper.AgentController;
+import jade.wrapper.AgentContainer;
 import jade.wrapper.ContainerController;
 import jade.wrapper.StaleProxyException;
 
+import java.awt.*;
+
 public class ToRun  extends Agent {
+    private static Runtime runtime;
+    private static AgentContainer container;
+
     protected void setup() {
+
+        // ContainerController newContainer = new ContainerController();
+
+        /*
+        runtime = jade.core.Runtime.instance();
+
+        Profile profile = new ProfileImpl();
+        profile.setParameter("gui","false");
+        profile.setParameter("port","8000");
+
+        container = (AgentContainer) runtime.createMainContainer(profile);
+
+        try {
+            container.acceptNewAgent("name", agent).start(); //
+        } catch (StaleProxyException e) {
+
+        }
+
+        */
+
         ContainerController containerController = getContainerController();
 
         try {

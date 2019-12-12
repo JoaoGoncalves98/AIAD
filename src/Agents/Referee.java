@@ -12,7 +12,7 @@ public class Referee extends Agent {
 
 	private AID agentGame = null;
 
-	private int timer = 60*4;
+	private int timer = 30;
 	//private int timer = 30;
 
 	protected void setup()
@@ -58,7 +58,7 @@ public class Referee extends Agent {
 				send( m );
 
 				try {
-					Thread.sleep(1000);
+					Thread.sleep(1);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -68,7 +68,7 @@ public class Referee extends Agent {
 			while(!this.joinned) {
 
 				try {
-					Thread.sleep(1000);
+					Thread.sleep(1);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -113,7 +113,7 @@ public class Referee extends Agent {
 			while(this.flag) {
 
 				try {
-					Thread.sleep(1000);
+					Thread.sleep(1);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -160,7 +160,7 @@ public class Referee extends Agent {
 		{
 			System.out.println("Referee started the clock!");
 			try {
-				Thread.sleep(this.father.timer * 1000);
+				Thread.sleep(this.father.timer * 1000); //TEMPO DE JOGO SEM TIMERS FICA A QUANTO HMMMM?
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

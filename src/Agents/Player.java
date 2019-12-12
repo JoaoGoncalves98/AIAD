@@ -67,7 +67,7 @@ public class Player extends Agent {
 				send( m );
 
 				try {
-					Thread.sleep(1000);
+					Thread.sleep(1);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -77,7 +77,7 @@ public class Player extends Agent {
 			while(!this.joinned) {
 
 				try {
-					Thread.sleep(1000);
+					Thread.sleep(1);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -126,7 +126,7 @@ public class Player extends Agent {
 			while(this.agentGame == null) {
 				// ESPERANDO Q O JOGO COMECE
 				this.agentGame = this.father.utils.getService("gamestarted");
-				try { Thread.sleep(1000);} catch (InterruptedException e) { e.printStackTrace(); }
+				try { Thread.sleep(1);} catch (InterruptedException e) { e.printStackTrace(); }
 			}
 
 			while(this.agentGame != null) {
@@ -136,7 +136,8 @@ public class Player extends Agent {
 					AID sender = msg.getSender();
 					if (Utils.PLAY.equals(msg.getContent())) {
 						boolean f = true;
-						while (f) {
+                        long startTime1 = System.currentTimeMillis(); //time out a second and a half
+						while (f && (System.currentTimeMillis()-startTime1)<1500) {
 							ACLMessage msg2 = receive();
 							if (msg2 != null) {
 								f = false;
@@ -292,21 +293,18 @@ public class Player extends Agent {
 
 										send( m );
 									}
-
-
-
 								} catch (UnreadableException e) {
 									e.printStackTrace();
 								}
 							}
-							try { Thread.sleep(400);} catch (InterruptedException e) { e.printStackTrace(); }
+							try { Thread.sleep(1);} catch (InterruptedException e) { e.printStackTrace(); }
 						}
 					}
 				} else {
 					// if no message is arrived, block the behaviour
 					block();
 				}
-				try { Thread.sleep(1000);} catch (InterruptedException e) { e.printStackTrace(); }
+				try { Thread.sleep(1);} catch (InterruptedException e) { e.printStackTrace(); }
 			}
 			this.finished = true;
 		}

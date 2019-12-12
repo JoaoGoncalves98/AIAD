@@ -297,13 +297,21 @@ public class Game extends Agent {
                         send( m1 );
 
                         boolean f = true;
-                        while(f) {
+                        long startTime1 = System.currentTimeMillis(); //time out a second and a half
+                        while(f && (System.currentTimeMillis()-startTime1)<1500) {
                             ACLMessage msg = receive();
                             if (msg != null) {
                                 AID player = msg.getSender();
                                 this.endgame(msg);
                                 if (player.getLocalName().equals(team.players.get(i / 2).getLocalName())) {
-                                    String content = (String) msg.getContent();
+									//try { Thread.sleep(10); } catch (Exception e) {}
+									String content = "none";
+                                    long startTime2 = System.currentTimeMillis(); //time out a second and a half
+                                    while(content == "none" && (System.currentTimeMillis()-startTime2)<1500)
+										content = (String) msg.getContent();
+                                    if(content == null)
+                                        content = "none";
+									System.out.println("------------------>content: " + content);
                                     if (content.contains(Utils.RUN)) {
                                         // process run
 										String[] tokens = content.split(" ");
@@ -340,7 +348,10 @@ public class Game extends Agent {
                                         f = false;
                                     }
                                 } else {
+                                    System.out.println("player to play: " + team.players.get(i / 2).getLocalName());
+                                    System.out.println("player that tried to play: " + player.getLocalName());
                                     System.out.println("Wrong player to choose play!");
+                                    //f = false;
                                 }
                             } else {
                                 // if no message is arrived, block the behaviour
