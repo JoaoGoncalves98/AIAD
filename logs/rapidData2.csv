@@ -1,4 +1,4 @@
-Team,typePlayer1,typePlayer2,Team,typePlayer1,typePlayer2,possessionStarted,diffScore
+TeamA,typePlayer1A,typePlayer2A,TeamB,typePlayer1B,typePlayer2B,possessionStarted,diffScore
 A,0,0, B,0,0, A,41
 A,0,0, B,0,1, A,26
 A,0,0, B,0,2, B,15

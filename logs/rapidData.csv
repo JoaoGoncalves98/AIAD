@@ -1,4 +1,4 @@
-teamName, passedBall, launchedBall, teamIsAggressive, teamName, passedBall, launchedBall, teamIsAggressive,Possession, scoreDiff
+teamNameA, passedBallA, launchedBallA, teamIsAggressiveA, teamNameB, passedBallB, launchedBallB, teamIsAggressiveB,Possession, scoreDiff
 A, false, false, true, B, false, false, true, A,0
 A, false, false, true, B, false, false, true, A,0
 A, false, false, true, B, false, false, true, A,0
