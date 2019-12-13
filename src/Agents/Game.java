@@ -21,6 +21,7 @@ public class Game extends Agent {
 	private Team team2 = new Team(this.nPlayers/2, "B");
 	private AID referee = null;
 	private BasketballCourt court = new BasketballCourt(4, 'A', 'B', 8, 6);
+	public String startedBall = "";
 
 	private int[] score = new int[2]; // Pontuação
 	protected void setup() {
@@ -230,13 +231,9 @@ public class Game extends Agent {
 
 				// Broadcast !!!
                 PrintWriter out;
-                PrintWriter out2;
 				try{
                     out = new PrintWriter(new BufferedWriter(new FileWriter("logs/rapidData.csv", true)));
-                    out2 = new PrintWriter(new BufferedWriter(new FileWriter("logs/rapidData2.csv", true)));
-
-                    out2.write("A" + ", " + this.father.team1.getTypes().get(0) + ", " + this.father.team1.getTypes().get(1) + ", " + "B" + ", " + this.father.team2.getTypes().get(0) + ", " + this.father.team2.getTypes().get(1) + ", " + this.father.court.hasPossession() + ", " + (this.father.score[0]-this.father.score[1])+ ",\n");
-                    out2.flush();
+                    this.father.startedBall = this.father.court.hasPossession();
 					while(this.gameGoing) {
 				    // VE SE JOGO JA ACABOU
                     ACLMessage msg0 = receive();
@@ -340,9 +337,10 @@ public class Game extends Agent {
 										else
 											System.out.println(player.getLocalName() + " couldn't move");
 
-
-                                        out.write("A, false, false, " + Manager.aTactic + ", B, false, false, " + Manager.bTactic + ", " + this.father.court.hasPossession() + ", " + (this.father.score[0]-this.father.score[1])+ ",\n");
-                                        out.flush();
+                                        if(this.father.court.hasBall(player.getLocalName())) {
+                                            out.write("A, false, false, " + Manager.aTactic + ", B, false, false, " + Manager.bTactic + ", " + this.father.court.hasPossession() + ", " + (this.father.score[0]-this.father.score[1])+ ",\n");
+                                            out.flush();
+                                        }
 
                                         f = false;
                                     } else if (content.contains(Utils.PASS)) {
@@ -360,6 +358,7 @@ public class Game extends Agent {
 											if(player.getLocalName().toLowerCase().contains(""+'a'))
 											{
 												System.out.println("\n\nteste: " + player.getLocalName().toLowerCase());
+
 												out.write("A, true, false, " + Manager.aTactic + ", B, false, false, " + Manager.bTactic + ", " + this.father.court.hasPossession() + ", " + (this.father.score[0]-this.father.score[1])+ ",\n");
 												out.flush();
 											}
@@ -423,7 +422,7 @@ public class Game extends Agent {
                     PrintWriter out2;
                     try {
                         out2 = new PrintWriter(new BufferedWriter(new FileWriter("logs/rapidData2.csv", true)));
-                        out2.write("A" + ", " + this.father.team1.getTypes().get(0) + ", " + this.father.team1.getTypes().get(1) + ", " + "B" + ", " + this.father.team2.getTypes().get(0) + ", " + this.father.team2.getTypes().get(1) + ", " + this.father.court.hasPossession() + ", " + (this.father.score[0] - this.father.score[1]) + ",\n");
+                        out2.write("A" + ", " + this.father.team1.getTypes().get(0) + ", " + this.father.team1.getTypes().get(1) + ", " + "B" + ", " + this.father.team2.getTypes().get(0) + ", " + this.father.team2.getTypes().get(1) + ", " + this.father.startedBall + ", " + (this.father.score[0] - this.father.score[1]) + ",\n");
                         out2.flush();
                     } catch (IOException e) {
 
